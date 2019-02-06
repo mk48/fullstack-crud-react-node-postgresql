@@ -17,7 +17,7 @@ router.post("/", async function(req, res, next) {
     await models.product.create({
       id: uuidv4(),
       name: name,
-      //category: category, TODO
+      category_id: category, 
       expiry_date: expiryDate,
       is_expiry: isExpiry,
       price: price,
@@ -27,8 +27,7 @@ router.post("/", async function(req, res, next) {
 
     res.json({ success: true });
   } catch (e) {
-    console.log(e);
-    res.json({ err: e });
+    res.status(401).json(e.toString());
   }
 });
 

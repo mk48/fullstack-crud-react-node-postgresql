@@ -3,6 +3,9 @@ import React, { Component } from "react";
 //Libs
 import axios from "axios";
 
+//const
+import { SERVER_URL } from "./../../util/constant";
+
 //Private
 import ProductForm from "./ProductForm";
 
@@ -12,18 +15,10 @@ class Product extends Component {
     console.log(values);
 
     //load member details
-    const toServer = {
-      name: values.name,
-      category: values.category,
-      expiryDate: values.expiryDate,
-      isExpiry: values.isExpiry,
-      price: values.price,
-      size: values.size,
-      description: values.description
-    };
+    const toServer = values;
 
     try {
-      await axios.post(`http://localhost:3001/products`, toServer);
+      await axios.post(`${SERVER_URL}/products`, toServer);
       alert("Saved...");
     } catch (error) {
       console.log(error);
@@ -33,7 +28,7 @@ class Product extends Component {
 
   render() {
     return (
-      <div style={{ width: "50%" }}>
+      <div>
         <ProductForm SubmitClick={this.SaveProduct} />
       </div>
     );
