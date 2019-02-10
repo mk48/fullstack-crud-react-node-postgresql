@@ -6,20 +6,30 @@ import React, { useEffect, useState } from "react";
 import { Row, Column } from "./../style/grid";
 import OptionButtonGroup from "./../Common/OptionButtonGroup";
 import Selection from "./../Common/Selection";
+import {
+  useFormInput,
+  useFormInputTextArea,
+  useFormCheckbox,
+  useFormInputSelection
+} from "./../Common/FormHooks";
 
 //const date = new Date();
 //date.getFullYear() + "-" + date.getMonth() + 1 + "-" + date.getDate(),
 
-const sizeItems = [{
-  value: 1,
-  description: "Small"
-},{
-  value: 2,
-  description: "Medium"
-},{
-  value: 3,
-  description: "Large"
-}]
+const sizeItems = [
+  {
+    value: 1,
+    description: "Small"
+  },
+  {
+    value: 2,
+    description: "Medium"
+  },
+  {
+    value: 3,
+    description: "Large"
+  }
+];
 
 export default function ProductForm(props) {
   const nameField = useFormInput();
@@ -40,7 +50,7 @@ export default function ProductForm(props) {
       price: priceField.text,
       size: sizeField.text,
       description: descriptionField.value
-    }
+    };
     props.SubmitClick(values);
   }
 
@@ -56,7 +66,7 @@ export default function ProductForm(props) {
       <Row>
         <Column span="3">Category</Column>
         <Column span="9">
-          <Selection ApiUrl="category/search" {...categoryField}/>
+          <Selection ApiUrl="category/search" {...categoryField} />
         </Column>
       </Row>
 
@@ -103,60 +113,4 @@ export default function ProductForm(props) {
       </Row>
     </form>
   );
-}
-
-//------------------------------------------------------------------------------------------
-
-function useFormInput(initialValue) {
-  const [value, setValue] = useState(initialValue);
-
-  function handleChange(e) {
-    setValue(e.target.value);
-  }
-
-  return {
-    text: value,
-    onChange: handleChange
-  };
-}
-
-function useFormInputTextArea(initialValue) {
-  const [value, setValue] = useState(initialValue);
-
-  function handleChange(e) {
-    setValue(e.target.value);
-  }
-
-  return {
-    value,
-    onChange: handleChange
-  };
-}
-
-
-function useFormCheckbox(initialValue) {
-  const [value, setValue] = useState(initialValue);
-
-  function handleChange(e) {
-    setValue(e.target.checked);
-  }
-
-  return {
-    checked: value,
-    onChange: handleChange
-  };
-}
-
-
-function useFormInputSelection(initialValue) {
-  const [value, setValue] = useState(initialValue);
- 
-  function handleChange(e) {
-    setValue(e);
-  }
-
-  return {
-    value,
-    onChange: handleChange
-  };
 }
