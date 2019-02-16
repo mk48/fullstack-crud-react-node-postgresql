@@ -7,7 +7,8 @@ import axios from "axios";
 import { SERVER_URL } from "./../../util/constant";
 
 //Private
-import ProductForm from "./ProductForm";
+//import ProductForm from "./ProductForm";
+import ProductList from "./ProductList";
 
 class Product extends Component {
   SaveProduct = async values => {
@@ -29,7 +30,8 @@ class Product extends Component {
   render() {
     return (
       <div>
-        <ProductForm SubmitClick={this.SaveProduct} />
+       {/* <ProductForm SubmitClick={this.SaveProduct} /> */}
+       <ProductList/>
       </div>
     );
   }
