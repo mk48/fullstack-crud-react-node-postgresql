@@ -1,40 +1,34 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 
 //Libs
 import axios from "axios";
 
-//const
-import { SERVER_URL } from "./../../util/constant";
+//style component
+import { Row, Column } from "./../style/grid";
+
+//local
+import useDataApi from "../Common/DataApi/useDataApi";
 
 //Private
 //import ProductForm from "./ProductForm";
 import ProductList from "./ProductList";
 
-class Product extends Component {
-  SaveProduct = async values => {
+export default function Product() {
+  const [selectedProductId, setSelectedProductId] = useState(0);
+  const apiProduct = useDataApi("get", "products", {});
 
-    console.log(values);
-
-    //load member details
-    const toServer = values;
-
-    try {
-      await axios.post(`${SERVER_URL}/products`, toServer);
-      alert("Saved...");
-    } catch (error) {
-      console.log(error);
-      alert("Error...");
-    }
+  const ViewProduct = id => {
+    setSelectedProductId(id);
+    apiProduct.fetchData({id: id});
   };
 
-  render() {
-    return (
-      <div>
-       {/* <ProductForm SubmitClick={this.SaveProduct} /> */}
-       <ProductList/>
-      </div>
-    );
-  }
+  return (
+    <Row>
+      <Column span="3">here another: {apiProduct.data.name}</Column>
+      <Column span="9">
+        <ProductList ViewClick={ViewProduct} />
+      </Column>
+      {/* <ProductForm SubmitClick={this.SaveProduct} /> */}
+    </Row>
+  );
 }
-
-export default Product;

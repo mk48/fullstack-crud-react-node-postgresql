@@ -13,7 +13,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     category_id: {
       type: DataTypes.UUIDV4,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'category',
+        key: 'id'
+      }
     },
     expiry_date: {
       type: DataTypes.DATEONLY,

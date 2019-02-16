@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 //const
-import { SERVER_URL } from "./../../util/constant";
+import { SERVER_URL } from "./../../../util/constant";
 
 //concept taken from 
 //https://www.robinwieruch.de/react-hooks-fetch-data/
 
-const useDataApi = (apiMethod, url, initialData) => {
+const useQueryDataApi = (apiMethod, url, initialData) => {
   const [data, setData] = useState(initialData);
   //const [totRows, setTotRows] = useState(0);
   //const [toServer, setToServer] = useState(initialToServer);
@@ -56,4 +56,4 @@ const useDataApi = (apiMethod, url, initialData) => {
   return { data, loading, isError, fetch };
 };
 
-export default useDataApi;
+export default useQueryDataApi;

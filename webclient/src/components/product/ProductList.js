@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 //libs
 import RTable from "./../Common/ReactTable/Table";
@@ -6,87 +6,107 @@ import { Input } from "./../Common/ReactTable/Styles";
 import { useTableState } from "react-table";
 
 //style component
+import { RightAlign } from "./../style/rightAlign";
 
 //local
-import useDataApi from "./../Common/useDataApi";
+import useQueryDataApi from "../Common/DataApi/useQueryDataApi";
 
-const columns = [
-  //{ Header: "RowIndex", accessor: (row, index) => index, width: 100 },
-  {
-    Header: "Product name",
-    accessor: "name",
-    Filter: header => {
-      return (
-        <Input
-          value={header.filterValue || ""}
-          onChange={e => header.setFilter(e.target.value)}
-        />
-      );
+function GenerateColumns(onViewClick, onEditClick, onDeleteClick) {
+  const columns = [
+    //{ Header: "RowIndex", accessor: (row, index) => index, width: 100 },
+    {
+      Header: "Product name",
+      accessor: "name",
+      minWidth: 150,
+      Filter: header => {
+        return (
+          <Input
+            value={header.filterValue || ""}
+            onChange={e => header.setFilter(e.target.value)}
+          />
+        );
+      }
+    },
+    {
+      Header: "Category",
+      accessor: "category.name"
+    },
+    {
+      Header: "Is expiry",
+      accessor: "is_expiry",
+      maxWidth: 70,
+      Cell: data => (data.value ? "✓" : "")
+    },
+    {
+      Header: "expiry date",
+      accessor: "expiry_date"
+    },
+    {
+      Header: "size",
+      accessor: "size"
+    },
+    {
+      Header: "price",
+      accessor: "price",
+      Cell: data => <RightAlign>{data.value}</RightAlign>
+    },
+    /*{
+      Header: "Description",
+      accessor: "description",
+      Filter: header => {
+        return (
+          <Input
+            value={header.filterValue || ""}
+            onChange={e => header.setFilter(e.target.value)}
+          />
+        );
+      }
+    },*/
+    {
+      Header: "Actions",
+      Cell: data => {
+        //console.log("Row value: " + data.row.original.id);
+        return (
+          <div>
+            <button onClick={() => onViewClick(data.row.original.id)}>
+              View
+            </button>
+          </div>
+        );
+      }
     }
-  },
-  {
-    Header: "Category ID",
-    accessor: "category_id"
-  },
-  {
-    Header: "Is expiry",
-    accessor: "is_expiry"
-  },
-  {
-    Header: "expiry date",
-    accessor: "expiry_date"
-  },
-  {
-    Header: "size",
-    accessor: "size"
-  },
-  {
-    Header: "price",
-    accessor: "price",
-    Filter: header => {
-      return (
-        <Input
-          value={header.filterValue || ""}
-          onChange={e => header.setFilter(e.target.value)}
-        />
-      );
-    }
-  },
-  {
-    Header: "Description",
-    accessor: "description"
-  },
-  {
-    Header: "Actions",
-    Cell: data => {
-      console.log("Row value: " + data.row.original.id);
-      return <div />;
-    }
-  }
-];
+  ];
+  return columns;
+}
 
 export default function ProductList(props) {
-  const apiProductList = useDataApi("post", "products/query", []);
+  const apiProductList = useQueryDataApi("post", "products/query", []);
 
   // Make a new controllable table state instance
   const tableState = useTableState({ pageCount: 0 });
   const [{ sortBy, filters, pageIndex, pageSize }, setState] = tableState;
 
-  // When sorting, filters, pageSize, or pageIndex change, fetch new data
-  useEffect(async () => {
+  async function FetchData() {
     const totalRows = await apiProductList.fetch(
       sortBy,
       filters,
       pageIndex,
       pageSize
     );
-    console.log("TotRows = " + totalRows);
+    //console.log("TotRows = " + totalRows);
     const pageCount = Math.ceil(totalRows / pageSize);
     setState(old => ({
       ...old,
       pageCount
     }));
+  }
+
+  // When sorting, filters, pageSize, or pageIndex change, fetch new data
+  useEffect(() => {
+    FetchData();
   }, [sortBy, filters, pageIndex, pageSize]);
+
+  const columns = GenerateColumns(props.ViewClick);
 
   return (
     <div>

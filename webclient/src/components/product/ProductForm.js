@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 //Libs
 
 //Local
-import { Row, Column } from "./../style/grid";
 import OptionButtonGroup from "./../Common/OptionButtonGroup";
 import Selection from "./../Common/Selection";
 import {
@@ -12,6 +11,9 @@ import {
   useFormCheckbox,
   useFormInputSelection
 } from "./../Common/FormHooks";
+
+//style component
+import { Row, Column } from "./../style/grid";
 
 //const date = new Date();
 //date.getFullYear() + "-" + date.getMonth() + 1 + "-" + date.getDate(),

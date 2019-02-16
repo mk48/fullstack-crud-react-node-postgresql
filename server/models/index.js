@@ -30,6 +30,10 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+//db["category"].hasMany(db["product"], {foreignKey: 'id'});
+db["product"].belongsTo(db["category"], {foreignKey: 'category_id'});
+
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

@@ -3,6 +3,17 @@ var router = express.Router();
 var models = require("../models");
 const uuidv4 = require("uuid/v4");
 
+router.get("/", async function(req, res, next) {
+  const id = req.query.id;
+  try {
+    const productRow = await models.product.findById(id);
+
+    res.json(productRow);
+  } catch (e) {
+    res.status(401).json(e.toString());
+  }
+});
+
 router.post("/query", async function(req, res, next) {
   //sortBy, filters, pageIndex, pageSize
   const pageSize = req.body.pageSize;
@@ -19,7 +30,9 @@ router.post("/query", async function(req, res, next) {
     if (filters.hasOwnProperty(key)) {
       if (filters[key]) {
         //check the field data type, if string then add wild-card letters - LIKE operator
-        if (models.product.tableAttributes[key].type.constructor.key === "STRING") {
+        if (
+          models.product.tableAttributes[key].type.constructor.key === "STRING"
+        ) {
           filtersWithoutEmpty[key] = {
             [models.Sequelize.Op.iLike]: `%${filters[key]}%`
           };
@@ -34,7 +47,7 @@ router.post("/query", async function(req, res, next) {
     //count number of rows
     const totalRowsResult = await models.product.findAll({
       where: filtersWithoutEmpty,
-      attributes: [[models.Sequelize.fn('COUNT', 1), 'tot']]
+      attributes: [[models.Sequelize.fn("COUNT", 1), "tot"]]
     });
     const totalRows = totalRowsResult[0].dataValues.tot;
 
@@ -43,10 +56,17 @@ router.post("/query", async function(req, res, next) {
       limit: pageSize,
       offset: pageSize * pageIndex,
       order: sortedArray,
+      include: [
+        {
+          model: models.category,
+          attributes: ["name"]
+          //where: { id: models.Sequelize.col("product.category_id") }
+        }
+      ],
       attributes: [
         "id",
         "name",
-        "category_id",
+        //"category_id",
         "expiry_date",
         "is_expiry",
         "price",
@@ -55,7 +75,7 @@ router.post("/query", async function(req, res, next) {
       ]
     });
 
-    res.json({rows: products, totalRows: totalRows});
+    res.json({ rows: products, totalRows: totalRows });
   } catch (e) {
     res.status(401).json(e.toString());
   }
