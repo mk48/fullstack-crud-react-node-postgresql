@@ -6,7 +6,15 @@ const uuidv4 = require("uuid/v4");
 router.get("/", async function(req, res, next) {
   const id = req.query.id;
   try {
-    const productRow = await models.product.findById(id);
+    const productRow = await models.product.findOne({
+      where: {id: id},
+      include: [
+        {
+          model: models.category,
+          attributes: ["name"]
+        }
+      ]
+    });
 
     res.json(productRow);
   } catch (e) {

@@ -34,13 +34,15 @@ const sizeItems = [
 ];
 
 export default function ProductForm(props) {
-  const nameField = useFormInput();
-  const categoryField = useFormInputSelection();
-  const expiryField = useFormInput();
-  const isExpiryField = useFormCheckbox();
-  const priceField = useFormInput();
-  const sizeField = useFormInput();
-  const descriptionField = useFormInputTextArea();
+  const nameField = useFormInput(props.name);
+  const categoryField = useFormInputSelection(props.category);
+  const expiryField = useFormInput(props.expiryDate);
+  const isExpiryField = useFormCheckbox(props.isExpiry);
+  const priceField = useFormInput(props.price);
+  const sizeField = useFormInput(props.size);
+  const descriptionField = useFormInputTextArea(props.description);
+
+  console.log("Form - name text: " + nameField.text);
 
   function handleSubmit(e) {
     e.preventDefault();

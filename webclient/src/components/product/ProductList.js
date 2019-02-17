@@ -43,7 +43,8 @@ function GenerateColumns(onViewClick, onEditClick, onDeleteClick) {
     },
     {
       Header: "size",
-      accessor: "size"
+      accessor: "size",
+      maxWidth: 50,
     },
     {
       Header: "price",
@@ -70,6 +71,9 @@ function GenerateColumns(onViewClick, onEditClick, onDeleteClick) {
           <div>
             <button onClick={() => onViewClick(data.row.original.id)}>
               View
+            </button>
+            <button onClick={() => onEditClick(data.row.original.id)}>
+              Edit
             </button>
           </div>
         );
@@ -106,7 +110,7 @@ export default function ProductList(props) {
     FetchData();
   }, [sortBy, filters, pageIndex, pageSize]);
 
-  const columns = GenerateColumns(props.ViewClick);
+  const columns = GenerateColumns(props.ViewClick, props.EditClick);
 
   return (
     <div>
