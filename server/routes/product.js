@@ -116,4 +116,34 @@ router.post("/", async function(req, res, next) {
   }
 });
 
+
+router.post("/update", async function(req, res, next) {
+  const id = req.body.id;
+  const name = req.body.name;
+  const category = req.body.category;
+  const expiryDate = Date(req.body.expiryDate);
+  const isExpiry = Boolean(req.body.isExpiry);
+  const price = req.body.price;
+  const size = req.body.size;
+  const description = req.body.description;
+
+  try {
+    await models.product.update({
+      name: name,
+      category_id: category,
+      expiry_date: expiryDate,
+      is_expiry: isExpiry,
+      price: price,
+      size: size,
+      description: description
+    }, {
+      where: {id: id}
+    });
+
+    res.json({ success: true });
+  } catch (e) {
+    res.status(401).json(e.toString());
+  }
+});
+
 module.exports = router;

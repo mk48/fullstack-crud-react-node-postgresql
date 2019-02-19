@@ -4,16 +4,20 @@ export function useFormInput(initialValue) {
   const [value, setValue] = useState(initialValue);
 
   function handleChange(e) {
+    console.log("### useFormInput-handleChange- " + e.target.value);
     setValue(e.target.value);
   }
 
+  console.log("### initvalue: " + initialValue);
+  console.log("### actual value- " + value);
+
   return {
-    text: value,
+    value,
     onChange: handleChange
   };
 }
 
-export function useFormInputTextArea(initialValue) {
+/*export function useFormInputTextArea(initialValue) {
   const [value, setValue] = useState(initialValue);
 
   function handleChange(e) {
@@ -24,7 +28,7 @@ export function useFormInputTextArea(initialValue) {
     value,
     onChange: handleChange
   };
-}
+}*/
 
 export function useFormCheckbox(initialValue) {
   const [value, setValue] = useState(initialValue);

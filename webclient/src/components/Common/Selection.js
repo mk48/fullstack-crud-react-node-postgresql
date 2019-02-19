@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 //Libs
 import axios from "axios";
@@ -7,13 +7,13 @@ import AsyncSelect from "react-select/lib/Async";
 //const
 import { SERVER_URL } from "./../../util/constant";
 
-const options = [
+/*const options = [
   { value: "cho", label: "Chocolate" },
   { value: "str", label: "Strawberry" },
   { value: "van", label: "Vanilla" }
-];
+];*/
 
-export default function CategorySelection(props) {
+export default function Selection(props) {
   
   async function promiseOptions(inputValue) {
     try {
@@ -27,5 +27,5 @@ export default function CategorySelection(props) {
     }
   }
 
-  return <AsyncSelect loadOptions={promiseOptions} value={props.value} onChange={props.onChange} />;
+  return <AsyncSelect loadOptions={promiseOptions} id={props.id} name={props.name} value={props.value} onChange={props.onChange} />;
 }

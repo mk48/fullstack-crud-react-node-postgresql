@@ -124,7 +124,7 @@ export default function ProductList(props) {
         manualPagination={true} // Manual pagination
         disableMultiSort={false}
         disableGrouping={true} // Disable grouping
-        debug={true}
+        debug={false}
       />
     </div>
   );

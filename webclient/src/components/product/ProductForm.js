@@ -7,16 +7,12 @@ import OptionButtonGroup from "./../Common/OptionButtonGroup";
 import Selection from "./../Common/Selection";
 import {
   useFormInput,
-  useFormInputTextArea,
   useFormCheckbox,
   useFormInputSelection
 } from "./../Common/FormHooks";
 
 //style component
 import { Row, Column } from "./../style/grid";
-
-//const date = new Date();
-//date.getFullYear() + "-" + date.getMonth() + 1 + "-" + date.getDate(),
 
 const sizeItems = [
   {
@@ -35,24 +31,25 @@ const sizeItems = [
 
 export default function ProductForm(props) {
   const nameField = useFormInput(props.name);
-  const categoryField = useFormInputSelection(props.category);
-  const expiryField = useFormInput(props.expiryDate);
-  const isExpiryField = useFormCheckbox(props.isExpiry);
+  const categoryField = useFormInputSelection({
+    value: props.category_id,
+    label: props.category.name
+  });
+  const expiryField = useFormInput(props.expiry_date);
+  const isExpiryField = useFormCheckbox(props.is_expiry);
   const priceField = useFormInput(props.price);
   const sizeField = useFormInput(props.size);
-  const descriptionField = useFormInputTextArea(props.description);
-
-  console.log("Form - name text: " + nameField.text);
+  const descriptionField = useFormInput(props.description);
 
   function handleSubmit(e) {
     e.preventDefault();
     const values = {
-      name: nameField.text,
+      name: nameField.value,
       category: categoryField.value.value,
-      expiryDate: expiryField.text,
+      expiryDate: expiryField.value,
       isExpiry: isExpiryField.checked,
-      price: priceField.text,
-      size: sizeField.text,
+      price: priceField.value,
+      size: sizeField.value,
       description: descriptionField.value
     };
     props.SubmitClick(values);
@@ -61,58 +58,95 @@ export default function ProductForm(props) {
   return (
     <form onSubmit={handleSubmit}>
       <Row>
-        <Column span="3">Name</Column>
+        <Column span="3">
+          <label htmlFor="name">Name</label>
+        </Column>
         <Column span="9">
-          <input type="text" {...nameField} />
+          <input type="text" id="name" name="name" {...nameField} required />
         </Column>
       </Row>
 
       <Row>
-        <Column span="3">Category</Column>
+        <Column span="3">
+          <label htmlFor="category">Category</label>
+        </Column>
         <Column span="9">
-          <Selection ApiUrl="category/search" {...categoryField} />
+          <Selection
+            ApiUrl="category/search"
+            id="category"
+            name="category"
+            {...categoryField}
+          />
         </Column>
       </Row>
 
       <Row>
-        <Column span="3">Expiry Date</Column>
+        <Column span="3">
+          <label htmlFor="expiryDate">Expiry Date</label>
+        </Column>
         <Column span="9">
-          <input type="date" {...expiryField} />
+          <input
+            type="date"
+            id="expiryDate"
+            name="expiryDate"
+            {...expiryField}
+          />
         </Column>
       </Row>
 
       <Row>
-        <Column span="3">Is Expiry</Column>
+        <Column span="3">
+          <label htmlFor="isExpiry">Is Expiry</label>
+        </Column>
         <Column span="9">
-          <input type="checkbox" {...isExpiryField} />
+          <input
+            type="checkbox"
+            id="isExpiry"
+            name="isExpiry"
+            {...isExpiryField}
+          />
         </Column>
       </Row>
 
       <Row>
-        <Column span="3">Price</Column>
+        <Column span="3">
+          <label htmlFor="price">Price:</label>
+        </Column>
         <Column span="9">
-          <input type="number" step="0.25" {...priceField} />
+          <input
+            type="number"
+            id="price"
+            name="price"
+            step="0.25"
+            min="0.25"
+            max="99999"
+            {...priceField}
+          />
         </Column>
       </Row>
 
       <Row>
-        <Column span="3">Size</Column>
+        <Column span="3">
+          <label htmlFor="size">Size:</label>
+        </Column>
         <Column span="9">
           <OptionButtonGroup name="size" items={sizeItems} {...sizeField} />
         </Column>
       </Row>
 
       <Row>
-        <Column span="3">Name</Column>
+        <Column span="3">
+          <label htmlFor="description">Description:</label>
+        </Column>
         <Column span="9">
-          <textarea {...descriptionField} />
+          <textarea id="description" name="description" {...descriptionField} />
         </Column>
       </Row>
 
       <Row>
         <Column span="3">-</Column>
         <Column span="9">
-          <button type="submit">Save</button>
+          <button type="submit">{props.mode}</button>
         </Column>
       </Row>
     </form>
