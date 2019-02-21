@@ -10,6 +10,10 @@ import { RightAlign } from "./../style/rightAlign";
 
 //local
 import useQueryDataApi from "../Common/DataApi/useQueryDataApi";
+import useDebouncedCallback from "../Common/useDebouncedCallback";
+
+//const
+import { AUTOSUGGEST_DELAY } from "./../../util/constant";
 
 function GenerateColumns(onViewClick, onEditClick, onDeleteClick) {
   const columns = [
@@ -29,7 +33,8 @@ function GenerateColumns(onViewClick, onEditClick, onDeleteClick) {
     },
     {
       Header: "Category",
-      accessor: "category.name"
+      accessor: "category_id",
+      Cell: data => <div>{data.row.original.category.name}</div>
     },
     {
       Header: "Is expiry",
@@ -44,7 +49,7 @@ function GenerateColumns(onViewClick, onEditClick, onDeleteClick) {
     {
       Header: "size",
       accessor: "size",
-      maxWidth: 50,
+      maxWidth: 50
     },
     {
       Header: "price",
@@ -83,31 +88,47 @@ function GenerateColumns(onViewClick, onEditClick, onDeleteClick) {
   return columns;
 }
 
+async function FetchData({
+  setState,
+  apiProductList,
+  sortBy,
+  filters,
+  pageIndex,
+  pageSize
+}) {
+  const totalRows = await apiProductList.fetch(
+    sortBy,
+    filters,
+    pageIndex,
+    pageSize
+  );
+
+  //console.log("TotRows = " + totalRows);
+  const pageCount = Math.ceil(totalRows / pageSize);
+  setState(old => ({
+    ...old,
+    pageCount
+  }));
+}
+
 export default function ProductList(props) {
   const apiProductList = useQueryDataApi("post", "products/query", []);
+  const debouncedFetchData = useDebouncedCallback(FetchData, AUTOSUGGEST_DELAY, []);
 
   // Make a new controllable table state instance
   const tableState = useTableState({ pageCount: 0 });
   const [{ sortBy, filters, pageIndex, pageSize }, setState] = tableState;
 
-  async function FetchData() {
-    const totalRows = await apiProductList.fetch(
+  // When sorting, filters, pageSize, or pageIndex change, fetch new data
+  useEffect(() => {
+    debouncedFetchData({
+      setState,
+      apiProductList,
       sortBy,
       filters,
       pageIndex,
       pageSize
-    );
-    //console.log("TotRows = " + totalRows);
-    const pageCount = Math.ceil(totalRows / pageSize);
-    setState(old => ({
-      ...old,
-      pageCount
-    }));
-  }
-
-  // When sorting, filters, pageSize, or pageIndex change, fetch new data
-  useEffect(() => {
-    FetchData();
+    });
   }, [sortBy, filters, pageIndex, pageSize]);
 
   const columns = GenerateColumns(props.ViewClick, props.EditClick);

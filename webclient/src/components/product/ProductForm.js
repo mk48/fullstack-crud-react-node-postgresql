@@ -16,30 +16,32 @@ import { Row, Column } from "./../style/grid";
 
 const sizeItems = [
   {
-    value: 1,
+    value: "1",
     description: "Small"
   },
   {
-    value: 2,
+    value: "2",
     description: "Medium"
   },
   {
-    value: 3,
+    value: "3",
     description: "Large"
   }
 ];
 
 export default function ProductForm(props) {
-  const nameField = useFormInput(props.name);
+
+
+  const nameField = useFormInput(props.data.name);
   const categoryField = useFormInputSelection({
-    value: props.category_id,
-    label: props.category.name
+    value: props.data.category_id,
+    label: props.data.category.name
   });
-  const expiryField = useFormInput(props.expiry_date);
-  const isExpiryField = useFormCheckbox(props.is_expiry);
-  const priceField = useFormInput(props.price);
-  const sizeField = useFormInput(props.size);
-  const descriptionField = useFormInput(props.description);
+  const expiryField = useFormInput(props.data.expiry_date);
+  const isExpiryField = useFormCheckbox(props.data.is_expiry);
+  const priceField = useFormInput(props.data.price);
+  const sizeField = useFormInput(props.data.size);
+  const descriptionField = useFormInput(props.data.description);
 
   function handleSubmit(e) {
     e.preventDefault();

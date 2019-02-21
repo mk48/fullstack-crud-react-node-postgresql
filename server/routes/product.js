@@ -67,7 +67,7 @@ router.post("/query", async function(req, res, next) {
       include: [
         {
           model: models.category,
-          attributes: ["name"]
+          attributes: ["id", "name"]
           //where: { id: models.Sequelize.col("product.category_id") }
         }
       ],

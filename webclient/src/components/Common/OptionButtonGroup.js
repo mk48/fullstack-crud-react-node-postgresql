@@ -6,7 +6,6 @@ export default function OptionButtonGroup(props) {
     return <span key={index}>
       <input
         type="radio"
-        id={props.name}
         name={props.name}
         onChange={props.onChange}
         value={item.value}

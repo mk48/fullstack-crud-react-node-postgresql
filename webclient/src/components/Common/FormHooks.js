@@ -4,12 +4,8 @@ export function useFormInput(initialValue) {
   const [value, setValue] = useState(initialValue);
 
   function handleChange(e) {
-    console.log("### useFormInput-handleChange- " + e.target.value);
     setValue(e.target.value);
   }
-
-  console.log("### initvalue: " + initialValue);
-  console.log("### actual value- " + value);
 
   return {
     value,
