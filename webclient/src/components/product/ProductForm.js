@@ -13,6 +13,7 @@ import {
 
 //style component
 import { Row, Column } from "./../style/grid";
+import {FormRow, Button} from "./../style/form";
 
 const sizeItems = [
   {
@@ -59,16 +60,16 @@ export default function ProductForm(props) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Row>
+      <FormRow>
         <Column span="3">
           <label htmlFor="name">Name</label>
         </Column>
         <Column span="9">
           <input type="text" id="name" name="name" {...nameField} required />
         </Column>
-      </Row>
+      </FormRow>
 
-      <Row>
+      <FormRow>
         <Column span="3">
           <label htmlFor="category">Category</label>
         </Column>
@@ -80,9 +81,9 @@ export default function ProductForm(props) {
             {...categoryField}
           />
         </Column>
-      </Row>
+      </FormRow>
 
-      <Row>
+      <FormRow>
         <Column span="3">
           <label htmlFor="expiryDate">Expiry Date</label>
         </Column>
@@ -94,9 +95,9 @@ export default function ProductForm(props) {
             {...expiryField}
           />
         </Column>
-      </Row>
+      </FormRow>
 
-      <Row>
+      <FormRow>
         <Column span="3">
           <label htmlFor="isExpiry">Is Expiry</label>
         </Column>
@@ -108,9 +109,9 @@ export default function ProductForm(props) {
             {...isExpiryField}
           />
         </Column>
-      </Row>
+      </FormRow>
 
-      <Row>
+      <FormRow>
         <Column span="3">
           <label htmlFor="price">Price:</label>
         </Column>
@@ -125,32 +126,32 @@ export default function ProductForm(props) {
             {...priceField}
           />
         </Column>
-      </Row>
+      </FormRow>
 
-      <Row>
+      <FormRow>
         <Column span="3">
           <label htmlFor="size">Size:</label>
         </Column>
         <Column span="9">
           <OptionButtonGroup name="size" items={sizeItems} {...sizeField} />
         </Column>
-      </Row>
+      </FormRow>
 
-      <Row>
+      <FormRow>
         <Column span="3">
           <label htmlFor="description">Description:</label>
         </Column>
         <Column span="9">
           <textarea id="description" name="description" {...descriptionField} />
         </Column>
-      </Row>
+      </FormRow>
 
-      <Row>
+      <FormRow>
         <Column span="3">-</Column>
         <Column span="9">
-          <button type="submit">{props.mode}</button>
+          <Button primary type="submit">{props.mode}</Button>
         </Column>
-      </Row>
+      </FormRow>
     </form>
   );
 }

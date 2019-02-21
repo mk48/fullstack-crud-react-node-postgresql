@@ -4,6 +4,7 @@ import React, { useState } from "react";
 
 //style component
 import { Row, Column } from "./../style/grid";
+import { Button} from "./../style/form";
 
 //local
 
@@ -48,7 +49,7 @@ export default function Product() {
     <React.Fragment>
       <Row>
         <Column span="4">
-          <button onClick={ChangeModeToAdd}>Add new</button>
+          <Button primary onClick={ChangeModeToAdd}>Add new</Button>
         </Column>
       </Row>
       <Row>

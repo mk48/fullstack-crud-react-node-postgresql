@@ -2,6 +2,7 @@
 * separate form for new, edit
 * err in category wise sort, since it's sub value of category - category.name 
 * debounce the react-table changes.
+* button and form styles
 
 ### 2019-02-16
 * implemented react-table component with server-side data

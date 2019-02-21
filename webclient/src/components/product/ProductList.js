@@ -7,6 +7,7 @@ import { useTableState } from "react-table";
 
 //style component
 import { RightAlign } from "./../style/rightAlign";
+import { Button} from "./../style/form";
 
 //local
 import useQueryDataApi from "../Common/DataApi/useQueryDataApi";
@@ -74,12 +75,12 @@ function GenerateColumns(onViewClick, onEditClick, onDeleteClick) {
         //console.log("Row value: " + data.row.original.id);
         return (
           <div>
-            <button onClick={() => onViewClick(data.row.original.id)}>
+            <Button onClick={() => onViewClick(data.row.original.id)}>
               View
-            </button>
-            <button onClick={() => onEditClick(data.row.original.id)}>
+            </Button>
+            <Button onClick={() => onEditClick(data.row.original.id)}>
               Edit
-            </button>
+            </Button>
           </div>
         );
       }
