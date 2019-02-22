@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 
 //Libs
+import SplitPane from "react-split-pane";
 
 //style component
 import { Row, Column } from "./../style/grid";
-import { Button} from "./../style/form";
+import { Button } from "./../style/form";
+import "./../style/splitpane.css";
 
 //local
 
@@ -18,7 +20,6 @@ export default function Product() {
   const [selectedProductId, setSelectedProductId] = useState(0);
   const [mode, setMode] = useState("");
 
-  
   const ChangeModeToView = id => {
     setMode("view");
     setSelectedProductId(id);
@@ -37,8 +38,8 @@ export default function Product() {
 
   if (mode === "view") {
     View = <ProductView ProductId={selectedProductId} />;
-  } else if (mode === "new" ) {
-    View = <ProductFormNew/>;
+  } else if (mode === "new") {
+    View = <ProductFormNew />;
   } else if (mode === "edit") {
     View = <ProductFormEdit ProductId={selectedProductId} />;
   } else {
@@ -49,19 +50,21 @@ export default function Product() {
     <React.Fragment>
       <Row>
         <Column span="4">
-          <Button primary onClick={ChangeModeToAdd}>Add new</Button>
+          <Button primary onClick={ChangeModeToAdd}>
+            Add new
+          </Button>
         </Column>
       </Row>
       <Row>
-        <Column span="4">
-          {View} 
-        </Column>
-        <Column span="8">
-          <ProductList
-            ViewClick={ChangeModeToView}
-            EditClick={ChangeModeToEdit}
-          />
-        </Column>
+        <SplitPane defaultSize="25%">
+          <div>{View}</div>
+          <div>
+            <ProductList
+              ViewClick={ChangeModeToView}
+              EditClick={ChangeModeToEdit}
+            />
+          </div>
+        </SplitPane>
       </Row>
     </React.Fragment>
   );
