@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 
 //Libs
 
@@ -13,7 +13,7 @@ import {
 
 //style component
 import { Row, Column } from "./../style/grid";
-import {FormRow, Button} from "./../style/form";
+import { FormRow, Button } from "./../style/form";
 
 const sizeItems = [
   {
@@ -31,7 +31,14 @@ const sizeItems = [
 ];
 
 export default function ProductForm(props) {
-
+  const inputElementName = useRef(null);
+  const inputElementCategory = useRef(null);
+  const inputElementExpiryDate = useRef(null);
+  const inputElementIsExpiry = useRef(null);
+  const inputElementPrice = useRef(null);
+  const inputElementSize = useRef(null);
+  const inputElementDescription = useRef(null);
+  const inputElementSubmit = useRef(null);
 
   const nameField = useFormInput(props.data.name);
   const categoryField = useFormInputSelection({
@@ -43,6 +50,23 @@ export default function ProductForm(props) {
   const priceField = useFormInput(props.data.price);
   const sizeField = useFormInput(props.data.size);
   const descriptionField = useFormInput(props.data.description);
+
+  //add all elements into array, so that will move next
+  let currentFocusElementIndex = 0;
+  const AllInputElements = [
+    inputElementName,
+    inputElementCategory,
+    inputElementExpiryDate,
+    inputElementIsExpiry,
+    inputElementPrice,
+    inputElementSize,
+    inputElementDescription,
+    inputElementSubmit
+  ];
+
+  useEffect(() => {
+    inputElementName.current.focus();
+  }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -58,6 +82,18 @@ export default function ProductForm(props) {
     props.SubmitClick(values);
   }
 
+  function KeyDownEvent(e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      currentFocusElementIndex++;
+      if (AllInputElements[currentFocusElementIndex]) {
+        AllInputElements[currentFocusElementIndex].current.focus();
+      } else {
+        currentFocusElementIndex = 0;
+      }
+    }
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <FormRow>
@@ -65,7 +101,15 @@ export default function ProductForm(props) {
           <label htmlFor="name">Name</label>
         </Column>
         <Column span="9">
-          <input type="text" id="name" name="name" {...nameField} required />
+          <input
+            type="text"
+            id="name"
+            name="name"
+            ref={inputElementName}
+            onKeyDown={KeyDownEvent}
+            {...nameField}
+            required
+          />
         </Column>
       </FormRow>
 
@@ -78,6 +122,8 @@ export default function ProductForm(props) {
             ApiUrl="category/search"
             id="category"
             name="category"
+            Ref={inputElementCategory}
+            onInputKeyDown={KeyDownEvent}
             {...categoryField}
           />
         </Column>
@@ -92,6 +138,8 @@ export default function ProductForm(props) {
             type="date"
             id="expiryDate"
             name="expiryDate"
+            ref={inputElementExpiryDate}
+            onKeyDown={KeyDownEvent}
             {...expiryField}
           />
         </Column>
@@ -106,6 +154,8 @@ export default function ProductForm(props) {
             type="checkbox"
             id="isExpiry"
             name="isExpiry"
+            ref={inputElementIsExpiry}
+            onKeyDown={KeyDownEvent}
             {...isExpiryField}
           />
         </Column>
@@ -123,6 +173,8 @@ export default function ProductForm(props) {
             step="0.25"
             min="0.25"
             max="99999"
+            ref={inputElementPrice}
+            onKeyDown={KeyDownEvent}
             {...priceField}
           />
         </Column>
@@ -133,7 +185,13 @@ export default function ProductForm(props) {
           <label htmlFor="size">Size:</label>
         </Column>
         <Column span="9">
-          <OptionButtonGroup name="size" items={sizeItems} {...sizeField} />
+          <OptionButtonGroup
+            name="size"
+            items={sizeItems}
+            Ref={inputElementSize}
+            onKeyDown={KeyDownEvent}
+            {...sizeField}
+          />
         </Column>
       </FormRow>
 
@@ -142,14 +200,22 @@ export default function ProductForm(props) {
           <label htmlFor="description">Description:</label>
         </Column>
         <Column span="9">
-          <textarea id="description" name="description" {...descriptionField} />
+          <textarea
+            id="description"
+            name="description"
+            ref={inputElementDescription}
+            onKeyDown={KeyDownEvent}
+            {...descriptionField}
+          />
         </Column>
       </FormRow>
 
       <FormRow>
         <Column span="3">-</Column>
         <Column span="9">
-          <Button primary type="submit">{props.mode}</Button>
+          <Button primary type="submit" ref={inputElementSubmit}>
+            {props.mode}
+          </Button>
         </Column>
       </FormRow>
     </form>

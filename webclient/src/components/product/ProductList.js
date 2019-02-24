@@ -135,7 +135,6 @@ export default function ProductList(props) {
   const columns = GenerateColumns(props.ViewClick, props.EditClick);
 
   return (
-    <div>
       <RTable
         data={apiProductList.data}
         columns={columns}
@@ -148,7 +147,6 @@ export default function ProductList(props) {
         disableGrouping={true} // Disable grouping
         debug={false}
       />
-    </div>
   );
 }
 

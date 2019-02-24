@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 
-import Product from "./../product";
+//import Product from "./../product";
+import Purchase from "./../purchase";
 
 class MainLayout extends Component {
   render() {
-    return <Product />;
+    return <Purchase />;
   }
 }
 

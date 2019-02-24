@@ -10,6 +10,8 @@ export default function OptionButtonGroup(props) {
         onChange={props.onChange}
         value={item.value}
         checked={props.value === item.value}
+        onKeyDown={props.KeyDownEvent}
+        ref={props.Ref}
       />{" "}
       {item.description}
     </span>

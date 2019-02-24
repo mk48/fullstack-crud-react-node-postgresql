@@ -14,11 +14,10 @@ import { SERVER_URL } from "./../../util/constant";
 ];*/
 
 export default function Selection(props) {
-  
   async function promiseOptions(inputValue) {
     try {
       const values = await axios.get(`${SERVER_URL}/${props.ApiUrl}`, {
-        params: {name: inputValue}
+        params: { name: inputValue }
       });
       //console.log(values);
       return values.data;
@@ -27,5 +26,15 @@ export default function Selection(props) {
     }
   }
 
-  return <AsyncSelect loadOptions={promiseOptions} id={props.id} name={props.name} value={props.value} onChange={props.onChange} />;
+  return (
+    <AsyncSelect
+      loadOptions={promiseOptions}
+      id={props.id}
+      name={props.name}
+      value={props.value}
+      onChange={props.onChange}
+      ref={props.Ref}
+      onInputKeyDown={props.onInputKeyDown}
+    />
+  );
 }

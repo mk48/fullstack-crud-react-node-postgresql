@@ -1,3 +1,9 @@
+### 2019-02-24
+* in form, enter key - move focus to next input
+
+### 2019-02-23
+* move focus while showing form
+
 ### 2019-02-21
 * separate form for new, edit
 * err in category wise sort, since it's sub value of category - category.name 

@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 
 //Libs
-import SplitPane from "react-split-pane";
 
 //style component
 import { Row, Column } from "./../style/grid";
 import { Button } from "./../style/form";
-import "./../style/splitpane.css";
 
 //local
 
@@ -56,15 +54,13 @@ export default function Product() {
         </Column>
       </Row>
       <Row>
-        <SplitPane defaultSize="25%">
-          <div>{View}</div>
-          <div>
-            <ProductList
-              ViewClick={ChangeModeToView}
-              EditClick={ChangeModeToEdit}
-            />
-          </div>
-        </SplitPane>
+        <Column span="4">{View}</Column>
+        <Column span="8">
+          <ProductList
+            ViewClick={ChangeModeToView}
+            EditClick={ChangeModeToEdit}
+          />
+        </Column>
       </Row>
     </React.Fragment>
   );
