@@ -6,12 +6,12 @@ import { Row, Column } from "./../style/grid";
 //local
 import useDataApi from "../Common/DataApi/useDataApi";
 
-export default function ProductView(props) {
+export default function ProductView({match}) {
   const getProductApi = useDataApi("get", "products", null);
 
   useEffect(() => {
-    getProductApi.fetchData({ id: props.ProductId });
-  }, [props.ProductId]);
+    getProductApi.fetchData({ id: match.params.ProductId });
+  }, [match.params.ProductId]);
 
   const data = getProductApi.data;
 

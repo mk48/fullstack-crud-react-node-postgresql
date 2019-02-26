@@ -12,7 +12,7 @@ import {
 } from "./../Common/FormHooks";
 
 //style component
-import { Row, Column } from "./../style/grid";
+import { Column } from "./../style/grid";
 import { FormRow, Button } from "./../style/form";
 
 const sizeItems = [

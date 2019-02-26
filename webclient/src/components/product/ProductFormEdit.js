@@ -6,17 +6,17 @@ import useDataApi from "../Common/DataApi/useDataApi";
 //private
 import ProductForm from "./ProductForm";
 
-export default function ProductFormEdit(props) {
+export default function ProductFormEdit({match}) {
   const [isSuccess, setIsSuccess] = useState(false);
   const getProductApi = useDataApi("get", "products", null);
   const updateProductApi = useDataApi("post", "products/update", {});
 
   useEffect(() => {
-    getProductApi.fetchData({ id: props.ProductId });
-  }, [props.ProductId]);
+    getProductApi.fetchData({ id: match.params.ProductId });
+  }, [match.params.ProductId]);
 
   const UpdateProduct = async data => {
-    await updateProductApi.fetchData({ ...data, id: props.ProductId });
+    await updateProductApi.fetchData({ ...data, id: match.params.ProductId });
     setIsSuccess(true);
   };
 

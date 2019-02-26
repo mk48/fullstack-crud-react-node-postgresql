@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 //libs
 import RTable from "./../Common/ReactTable/Table";
@@ -7,7 +8,6 @@ import { useTableState } from "react-table";
 
 //style component
 import { RightAlign } from "./../style/rightAlign";
-import { Button} from "./../style/form";
 
 //local
 import useQueryDataApi from "../Common/DataApi/useQueryDataApi";
@@ -16,8 +16,7 @@ import useDebouncedCallback from "../Common/useDebouncedCallback";
 //const
 import { AUTOSUGGEST_DELAY } from "./../../util/constant";
 
-function GenerateColumns(onViewClick, onEditClick, onDeleteClick) {
-  const columns = [
+  const Columns = [
     //{ Header: "RowIndex", accessor: (row, index) => index, width: 100 },
     {
       Header: "Product name",
@@ -72,22 +71,15 @@ function GenerateColumns(onViewClick, onEditClick, onDeleteClick) {
     {
       Header: "Actions",
       Cell: data => {
-        //console.log("Row value: " + data.row.original.id);
         return (
           <div>
-            <Button onClick={() => onViewClick(data.row.original.id)}>
-              View
-            </Button>
-            <Button onClick={() => onEditClick(data.row.original.id)}>
-              Edit
-            </Button>
+            <Link to={`view/${data.row.original.id}`}>View</Link>
+            <Link to={`edit/${data.row.original.id}`}>Edit</Link>
           </div>
         );
       }
     }
   ];
-  return columns;
-}
 
 async function FetchData({
   setState,
@@ -112,9 +104,13 @@ async function FetchData({
   }));
 }
 
-export default function ProductList(props) {
+export default function ProductList() {
   const apiProductList = useQueryDataApi("post", "products/query", []);
-  const debouncedFetchData = useDebouncedCallback(FetchData, AUTOSUGGEST_DELAY, []);
+  const debouncedFetchData = useDebouncedCallback(
+    FetchData,
+    AUTOSUGGEST_DELAY,
+    []
+  );
 
   // Make a new controllable table state instance
   const tableState = useTableState({ pageCount: 0 });
@@ -132,21 +128,19 @@ export default function ProductList(props) {
     });
   }, [sortBy, filters, pageIndex, pageSize]);
 
-  const columns = GenerateColumns(props.ViewClick, props.EditClick);
-
   return (
-      <RTable
-        data={apiProductList.data}
-        columns={columns}
-        state={tableState} // Pass the state to the table
-        loading={apiProductList.loading}
-        manualSorting={true} // Manual sorting
-        manualFilters={true} // Manual filters
-        manualPagination={true} // Manual pagination
-        disableMultiSort={false}
-        disableGrouping={true} // Disable grouping
-        debug={false}
-      />
+    <RTable
+      data={apiProductList.data}
+      columns={Columns}
+      state={tableState} // Pass the state to the table
+      loading={apiProductList.loading}
+      manualSorting={true} // Manual sorting
+      manualFilters={true} // Manual filters
+      manualPagination={true} // Manual pagination
+      disableMultiSort={false}
+      disableGrouping={true} // Disable grouping
+      debug={false}
+    />
   );
 }
 

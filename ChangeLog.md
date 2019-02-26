@@ -1,3 +1,8 @@
+### 2019-02-26
+* implemented react router
+* move product add/edit/list/view logic into appropriate router
+* get started purchase grid
+
 ### 2019-02-24
 * in form, enter key - move focus to next input
 

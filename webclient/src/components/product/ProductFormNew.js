@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 //local
 import useDataApi from "../Common/DataApi/useDataApi";
@@ -21,7 +21,7 @@ const InitialData = {
   category: { name: "" }
 };
 
-export default function ProductFormNew(props) {
+export default function ProductFormNew() {
   const [data, setData] = useState(InitialData);
   const [lastUpdate, setLastUpdate] = useState(date);
   const [isSuccess, setIsSuccess] = useState(false);
