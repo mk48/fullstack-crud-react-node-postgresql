@@ -1,3 +1,6 @@
+### 2019-02-27
+* update purchase grid
+
 ### 2019-02-26
 * implemented react router
 * move product add/edit/list/view logic into appropriate router
