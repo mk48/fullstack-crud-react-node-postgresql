@@ -13,7 +13,7 @@ import {
 
 //style component
 import { Column } from "./../style/grid";
-import { FormRow, Button } from "./../style/form";
+import { FormRow, Button, TextBox } from "./../style/form";
 
 const sizeItems = [
   {
@@ -101,7 +101,7 @@ export default function ProductForm(props) {
           <label htmlFor="name">Name</label>
         </Column>
         <Column span="9">
-          <input
+          <TextBox
             type="text"
             id="name"
             name="name"
@@ -134,7 +134,7 @@ export default function ProductForm(props) {
           <label htmlFor="expiryDate">Expiry Date</label>
         </Column>
         <Column span="9">
-          <input
+          <TextBox
             type="date"
             id="expiryDate"
             name="expiryDate"
@@ -166,7 +166,7 @@ export default function ProductForm(props) {
           <label htmlFor="price">Price:</label>
         </Column>
         <Column span="9">
-          <input
+          <TextBox
             type="number"
             id="price"
             name="price"

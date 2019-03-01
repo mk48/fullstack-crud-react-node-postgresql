@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import {Row} from "./grid";
+import { Row } from "./grid";
 
 export const FormRow = styled(Row)`
-  margin: 1em
+  margin: 1em;
 `;
 
 export const Form = styled.div`
@@ -17,11 +17,38 @@ export const FormItem = styled.div`
 `;
 
 export const Button = styled.button`
-  background: ${props => (props.primary ? "#4CAF50" : "#e7e7e7")};
+  background: ${props => (props.primary ? "rgb(28, 184, 65)" : "#e7e7e7")};
+  font-size: 16px;
+  color: white;
+  padding: 7px 15px;
+  border-style: none;
   text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-  font-size: 0.9em;
-  padding: 0.25em 0.25em;
+  display: inline-block;
   border: none;
+  border-radius: 4px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+`;
+
+export const TextBox = styled.input`
+  padding: 6px 10px;
+  font-size: 15px;
+`;
+
+export const Radio = styled.input`
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
 `;

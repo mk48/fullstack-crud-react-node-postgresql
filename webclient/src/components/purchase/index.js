@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactDataSheet from "react-datasheet";
 import "react-datasheet/lib/react-datasheet.css";
-import Select from "react-select";
+import Select, { components } from "react-select";
 
 //style component
 import { Row, Column } from "./../style/grid";
@@ -9,6 +9,17 @@ import { Row, Column } from "./../style/grid";
 //private
 //import ProductSelection from "./ProductSelection"
 import "./style.css";
+
+const groupStyles = {
+  width: 300,
+  background: "white"
+};
+
+const Menu = props => (
+  <components.Menu {...props}>
+    <div style={groupStyles}>{props.children}</div>
+  </components.Menu>
+);
 
 const options = [
   { label: "Bread", value: 1 },
@@ -20,6 +31,26 @@ const options = [
   { label: "Onions", value: 7 },
   { label: "Salad", value: 8 }
 ];
+
+function AmountFormatter(props) {
+  return <div>{props.value}</div>;
+}
+
+//re-calculate the row like, Amount = Mrp x Qty
+function RecalculateRow(grid, srno) {
+  const gridUpdated = grid.map((row, i) => {
+    if (row.srno === srno) {
+      return { ...row, qty_mrp: row.qty * row.mrp };
+    } else {
+      return row;
+    }
+  });
+  return gridUpdated;
+}
+
+//if any changes happen on thease columns, that row should be re-calculated
+//like, Qty. if any changes on Qty column, then amount should be re-calculated with QtyxMrp
+const RecalculateColumns = ["qty", "mrp"];
 
 export default function Purchase() {
   const [purchaseGrid, setPurchaseGrid] = useState([
@@ -40,21 +71,17 @@ export default function Purchase() {
       qty_mrp: 90
     }
   ]);
-  /*const [gridValue, setGridValue] = useState([
-    [{ readOnly: true, value: "1" }, { value: "", dataEditor: ProductSelection },{ value: 0 }, { value: 0 }, { value: 0 }],
-    [{ readOnly: true, value: "2" }, { value: "", dataEditor: ProductSelection },{ value: 0 }, { value: 0 }, { value: 0 }]
-  ]);*/
 
   function GenerateGrid() {
     const gridValues = purchaseGrid.map((pg, i) => {
       const oneRow = [];
-
       //srno
-      oneRow.push({ readOnly: true, value: pg.srno });
+      oneRow.push({ name: "srno", readOnly: true, value: pg.srno });
 
-      //don't confuse DataSheet's {value, etc...} with Select control's {label, value}
+      //don't confuse DataSheet's {value, component} with Select control's {label, value}
       //product selection
       oneRow.push({
+        name: "product_name",
         value: pg.product_name,
         component: ProductSelectComponent({
           srno: pg.srno,
@@ -64,18 +91,34 @@ export default function Purchase() {
       });
 
       //qty
-      oneRow.push({ value: pg.qty });
+      oneRow.push({ name: "qty", value: pg.qty });
 
       //mrp
-      oneRow.push({ value: pg.mrp });
+      oneRow.push({ name: "mrp", value: pg.mrp, valueViewer: AmountFormatter });
 
       //qty x mrp
-      oneRow.push({ value: pg.qty_mrp });
+      oneRow.push({ name: "qty_mrp", readOnly: true, value: pg.qty_mrp });
 
       return oneRow;
     });
 
     return gridValues;
+  }
+
+  function AddMoreRows() {
+    const oneNewRow = {
+      srno: purchaseGrid.length + 1,
+      product_name: "",
+      product_id: "",
+      qty: "",
+      mrp: "",
+      qty_mrp: ""
+    };
+
+    let purchaseGridCopy = purchaseGrid.map((pg, i) => pg);
+    purchaseGridCopy.push(oneNewRow);
+
+    setPurchaseGrid(purchaseGridCopy);
   }
 
   function ProductSelectComponent({ srno, value, label }) {
@@ -85,20 +128,31 @@ export default function Purchase() {
         openOnFocus
         closeOnSelect
         value={{ value, label }}
-        onChange={opt => ProductSelected(srno, opt)}
+        onChange={opt =>
+          UpdateProductGridValues(srno, {
+            product_name: opt.label,
+            product_id: opt.value
+          })
+        }
         options={options}
+        components={{ Menu }}
       />
     );
   }
 
-  function ProductSelected(srno, opt) {
-    const purchaseGridUpdated = purchaseGrid.map((pg, i) => {
+  function UpdateProductGridValues(srno, newValues, needRecalculation) {
+    let purchaseGridUpdated = purchaseGrid.map((pg, i) => {
       if (pg.srno === srno) {
-        return { ...pg, product_name: opt.label, product_id: opt.value };
+        return { ...pg, ...newValues };
       } else {
         return pg;
       }
     });
+
+    if (needRecalculation) {
+      purchaseGridUpdated = RecalculateRow(purchaseGridUpdated, srno);
+    }
+
     setPurchaseGrid(purchaseGridUpdated);
   }
 
@@ -139,15 +193,23 @@ export default function Purchase() {
           </table>
         )}
         rowRenderer={({ row, cells, children }) => <tr>{children}</tr>}
-        onChange={() => {}}
-        /*onCellsChanged={changes => {
-          const grid = gridValue.map(row => [...row]);
+        onCellsChanged={changes => {
           changes.forEach(({ cell, row, col, value }) => {
-            grid[row][col] = { ...grid[row][col], value };
+            if (cell.name === "product_name") {
+              return;
+            }
+            const recalculationRequired = RecalculateColumns.includes(
+              cell.name
+            );
+            UpdateProductGridValues(
+              row + 1,
+              { [cell.name]: value },
+              recalculationRequired
+            );
           });
-          setGridValue(grid);
-        }}*/
+        }}
       />
+      <button onClick={AddMoreRows}>Add rows</button>
 
       <Row>
         <Column span="3">

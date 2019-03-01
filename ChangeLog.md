@@ -1,3 +1,10 @@
+### 2019-03-01
+* purchase grid - product selection - increase width
+
+### 2019-02-28
+* purchase grid edit cell
+* add more rows in purchase grid by adding a button
+
 ### 2019-02-27
 * update purchase grid
 
