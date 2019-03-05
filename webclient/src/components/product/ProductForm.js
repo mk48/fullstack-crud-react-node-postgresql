@@ -107,7 +107,8 @@ export default function ProductForm(props) {
             name="name"
             ref={inputElementName}
             onKeyDown={KeyDownEvent}
-            {...nameField}
+            value={nameField.value}
+            onChange={nameField.onChange}
             required
           />
         </Column>
@@ -140,7 +141,8 @@ export default function ProductForm(props) {
             name="expiryDate"
             ref={inputElementExpiryDate}
             onKeyDown={KeyDownEvent}
-            {...expiryField}
+            value={expiryField.value}
+            onChange={expiryField.onChange}
           />
         </Column>
       </FormRow>
@@ -156,7 +158,8 @@ export default function ProductForm(props) {
             name="isExpiry"
             ref={inputElementIsExpiry}
             onKeyDown={KeyDownEvent}
-            {...isExpiryField}
+            value={isExpiryField.value}
+            onChange={isExpiryField.onChange}
           />
         </Column>
       </FormRow>
@@ -175,7 +178,8 @@ export default function ProductForm(props) {
             max="99999"
             ref={inputElementPrice}
             onKeyDown={KeyDownEvent}
-            {...priceField}
+            value={priceField.value}
+            onChange={priceField.onChange}
           />
         </Column>
       </FormRow>
@@ -190,7 +194,8 @@ export default function ProductForm(props) {
             items={sizeItems}
             Ref={inputElementSize}
             onKeyDown={KeyDownEvent}
-            {...sizeField}
+            value={sizeField.value}
+            onChange={sizeField.onChange}
           />
         </Column>
       </FormRow>
@@ -205,7 +210,8 @@ export default function ProductForm(props) {
             name="description"
             ref={inputElementDescription}
             onKeyDown={KeyDownEvent}
-            {...descriptionField}
+            value={descriptionField.value}
+            onChange={descriptionField.onChange}
           />
         </Column>
       </FormRow>

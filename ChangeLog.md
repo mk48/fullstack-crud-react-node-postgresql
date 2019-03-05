@@ -1,3 +1,6 @@
+### 2019-03-02
+* purchase - separate screen for add, edit, view and index page like product
+
 ### 2019-03-01
 * purchase grid - product selection - increase width
 

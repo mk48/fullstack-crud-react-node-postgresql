@@ -7,8 +7,9 @@ import useDataApi from "../Common/DataApi/useDataApi";
 import ProductForm from "./ProductForm";
 
 const date = new Date();
+const month = Number(date.getMonth()) + 1;
 const fullDate =
-  date.getFullYear() + "-" + date.getMonth() + 1 + "-" + date.getDate();
+  date.getFullYear() + "-" + month + "-" + date.getDate();
 
 const InitialData = {
   name: "",

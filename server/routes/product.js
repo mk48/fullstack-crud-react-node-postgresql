@@ -146,4 +146,21 @@ router.post("/update", async function(req, res, next) {
   }
 });
 
+router.get("/search", async function(req, res, next) {
+  const name = req.query.name;
+
+  try {
+    const rows = await models.product.findAll({
+      attributes: ["id", "name", "price"],
+      where: {
+        name: { [models.Sequelize.Op.like]: `%${name}%` }
+      }
+    });
+
+    res.json(rows);
+  } catch (e) {
+    res.status(401).json(err.toString());
+  }
+});
+
 module.exports = router;

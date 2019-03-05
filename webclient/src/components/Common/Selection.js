@@ -26,15 +26,5 @@ export default function Selection(props) {
     }
   }
 
-  return (
-    <AsyncSelect
-      loadOptions={promiseOptions}
-      id={props.id}
-      name={props.name}
-      value={props.value}
-      onChange={props.onChange}
-      ref={props.Ref}
-      onInputKeyDown={props.onInputKeyDown}
-    />
-  );
+  return <AsyncSelect loadOptions={promiseOptions} {...props} />;
 }

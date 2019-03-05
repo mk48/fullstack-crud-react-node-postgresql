@@ -9,6 +9,7 @@ export function useFormInput(initialValue) {
 
   return {
     value,
+    setValue,
     onChange: handleChange
   };
 }
