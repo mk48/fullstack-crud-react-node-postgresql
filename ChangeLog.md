@@ -1,3 +1,6 @@
+### 2019-03-06
+* purchase - all crud screens - view, add, list (edit is pending)
+
 ### 2019-03-02
 * purchase - separate screen for add, edit, view and index page like product
 

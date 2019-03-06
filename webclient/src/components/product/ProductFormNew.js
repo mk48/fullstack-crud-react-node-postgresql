@@ -2,21 +2,17 @@ import React, { useState } from "react";
 
 //local
 import useDataApi from "../Common/DataApi/useDataApi";
+import {Today} from "./../../util/date";
 
 //private
 import ProductForm from "./ProductForm";
-
-const date = new Date();
-const month = Number(date.getMonth()) + 1;
-const fullDate =
-  date.getFullYear() + "-" + month + "-" + date.getDate();
 
 const InitialData = {
   name: "",
   price: 0,
   size: 1,
   is_expiry: false,
-  expiry_date: fullDate,
+  expiry_date: Today(),
   description: "",
   category_id: "",
   category: { name: "" }
@@ -24,7 +20,7 @@ const InitialData = {
 
 export default function ProductFormNew() {
   const [data, setData] = useState(InitialData);
-  const [lastUpdate, setLastUpdate] = useState(date);
+  const [lastUpdate, setLastUpdate] = useState(Today());
   const [isSuccess, setIsSuccess] = useState(false);
   const saveProductApi = useDataApi("post", "products", {});
 

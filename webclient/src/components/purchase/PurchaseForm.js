@@ -16,7 +16,7 @@ import "./style.css";
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//const - Column name
+//const - purcahse Grid -  Column name
 const COL_SRNO = "srno";
 const COL_PRODUCT_NAME = "product_name";
 const COL_PRODUCT_ID = "product_id";
@@ -339,6 +339,9 @@ export default function PurchaseForm(props) {
             type="number"
             id="amount"
             name="amount"
+            step="0.01"
+            min="0.01"
+            max="9999999"
             ref={inputElementAmount}
             onKeyDown={KeyDownEvent}
             value={amountField.value}
@@ -354,6 +357,9 @@ export default function PurchaseForm(props) {
             type="number"
             id="discountPercentage"
             name="discountPercentage"
+            step="0.01"
+            min="0"
+            max="9999999"
             ref={inputElementDiscountPercentage}
             onKeyDown={KeyDownEvent}
             value={discountPercentageField.value}
@@ -369,6 +375,9 @@ export default function PurchaseForm(props) {
             type="number"
             id="discountAmount"
             name="discountAmount"
+            step="0.01"
+            min="0"
+            max="9999999"
             ref={inputElementDiscountAmount}
             onKeyDown={KeyDownEvent}
             value={discountAmountField.value}
@@ -384,6 +393,9 @@ export default function PurchaseForm(props) {
             type="number"
             id="total"
             name="total"
+            step="0.01"
+            min="0.01"
+            max="9999999"
             ref={inputElementTotal}
             onKeyDown={KeyDownEvent}
             value={totalField.value}

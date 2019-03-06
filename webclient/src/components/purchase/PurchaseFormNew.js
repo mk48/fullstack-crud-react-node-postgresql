@@ -2,21 +2,17 @@ import React, { useState } from "react";
 
 //local
 import useDataApi from "../Common/DataApi/useDataApi";
+import { Today } from "./../../util/date";
 
 //private
 import PurchaseForm from "./PurchaseForm";
 
-const date = new Date();
-const month = Number(date.getMonth()) + 1;
-const fullDate =
-  date.getFullYear() + "-" + month + "-" + date.getDate();
-
 const InitialData = {
   billno: "",
-  bill_date: fullDate,
+  bill_date: Today(),
   supplier: {
-      id: "",
-      name: ""
+    id: "",
+    name: ""
   },
   purchase_grid: [],
   amount: 0,
@@ -27,23 +23,28 @@ const InitialData = {
 
 export default function PurchaseFormNew() {
   const [data, setData] = useState(InitialData);
-  const [lastUpdate, setLastUpdate] = useState(date);
+  const [lastUpdate, setLastUpdate] = useState(Today());
   const [isSuccess, setIsSuccess] = useState(false);
-  const savePurchaseApi = useDataApi("post", "purchases", {});
+  const savePurchaseApi = useDataApi("post", "purchase", {});
 
-  async function SavePurchase (data) {
-    console.log(data);
-    return;
+  async function SavePurchase(data) {
     setIsSuccess(false);
     await savePurchaseApi.fetchData(data);
-    setData({...InitialData});
-    setIsSuccess(true);
-    setLastUpdate(new Date());
-  };
+    if (!savePurchaseApi.isError) {
+      setData({ ...InitialData });
+      setIsSuccess(true);
+      setLastUpdate(new Date());
+    }
+  }
 
   return (
     <React.Fragment>
-      <PurchaseForm key={lastUpdate} mode="new" data={data} SubmitClick={SavePurchase} />
+      <PurchaseForm
+        key={lastUpdate}
+        mode="new"
+        data={data}
+        SubmitClick={SavePurchase}
+      />
       {savePurchaseApi.loading && <div>Adding...</div>}
       {savePurchaseApi.isError && <div>Error occured while saving...</div>}
       {isSuccess && (

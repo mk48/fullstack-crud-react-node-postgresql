@@ -175,7 +175,7 @@ export default function ProductForm(props) {
             name="price"
             step="0.25"
             min="0.25"
-            max="99999"
+            max="9999999"
             ref={inputElementPrice}
             onKeyDown={KeyDownEvent}
             value={priceField.value}

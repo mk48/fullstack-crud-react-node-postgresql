@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DOUBLE,
       allowNull: true
     },
-    discount_amout: {
+    discount_amount: {
       type: DataTypes.DOUBLE,
       allowNull: true
     },
