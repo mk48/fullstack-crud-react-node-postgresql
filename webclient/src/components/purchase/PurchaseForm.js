@@ -16,14 +16,6 @@ import "./style.css";
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//const - purcahse Grid -  Column name
-const COL_SRNO = "srno";
-const COL_PRODUCT_NAME = "product_name";
-const COL_PRODUCT_ID = "product_id";
-const COL_QTY = "qty";
-const COL_MRP = "mrp";
-const COL_QTY_MRP = "qty_mrp";
-
 //bottom part of selection drop-down
 const Menu = props => (
   <components.Menu {...props}>{props.children}</components.Menu>
@@ -51,7 +43,61 @@ function RecalculateRow(grid, srno) {
 
 //if any changes happen on thease columns, that row should be re-calculated
 //like, Qty. if any changes on Qty column, then amount should be re-calculated with QtyxMrp
-const RecalculateColumns = [COL_QTY, COL_MRP];
+const RecalculateColumns = ["qty", "mrp"];
+
+function PurchaseGridOneCell(props) {
+  const {
+    Tag,
+    cell,
+    row,
+    col,
+    columns,
+    attributesRenderer,
+    selected,
+    editing,
+    updated,
+    style,
+    ...rest
+  } = props;
+
+  const attributes = cell.attributes || {};
+
+  // ignore default style handed to us by the component and roll our own
+  attributes.style = { padding: 5 };
+
+  return (
+    <td {...rest} {...attributes}>
+      {props.children}
+    </td>
+  );
+}
+
+function NumberInputBox(props) {
+  const [n, setN] = useState(props.value);
+  const inputRef = useRef();
+
+  console.log(props.value);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  function onChange(e) {
+    props.onChange(e.target.value);
+    setN(e.target.value);
+  }
+
+  return (
+    <input
+      type="number"
+      className="data-editor"
+      ref={inputRef}
+      value={n}
+      onChange={onChange}
+      onKeyDown={props.onKeyDown}
+    />
+  );
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -62,21 +108,25 @@ export default function PurchaseForm(props) {
     id: props.data.supplier_id,
     name: props.data.supplier.name
   });
-  const [purchaseGrid, setPurchaseGrid] = useState([]);
-  const amountField = useFormInput(props.data.amount);
+  const [purchaseGrid, setPurchaseGrid] = useState(props.data.purchase_grids);
+  const [amount, setAmount] = useState(props.data.amount);
   const discountPercentageField = useFormInput(props.data.discount_percentage);
-  const discountAmountField = useFormInput(props.data.discount_amount);
-  const totalField = useFormInput(props.data.tot);
+  const [discountAmount, setDiscountAmount] = useState(props.data.discount_amount);
+  const [total, setTotal] = useState(props.data.tot);
+
+  const [selectedRowCol, setSelectedRowCol] = useState({
+    start: { i: 0, j: 1 },
+    end: { i: 0, j: 1 }
+  });
 
   //------------- element ref
   const inputElementBillNo = useRef(null);
   const inputElementDate = useRef(null);
   const inputElementSupplier = useRef(null);
-  const inputElementAmount = useRef(null);
   const inputElementDiscountPercentage = useRef(null);
-  const inputElementDiscountAmount = useRef(null);
-  const inputElementTotal = useRef(null);
   const inputElementSubmit = useRef(null);
+
+  const isFirstRun = useRef(true);
 
   //add all elements into array, so that will move next
   let currentFocusElementIndex = 0;
@@ -84,10 +134,7 @@ export default function PurchaseForm(props) {
     inputElementBillNo,
     inputElementDate,
     inputElementSupplier,
-    inputElementAmount,
     inputElementDiscountPercentage,
-    inputElementDiscountAmount,
-    inputElementTotal,
     inputElementSubmit
   ];
 
@@ -95,32 +142,32 @@ export default function PurchaseForm(props) {
     const gridValues = purchaseGrid.map((pg, i) => {
       const oneRow = [];
       //srno
-      oneRow.push({ name: COL_SRNO, readOnly: true, value: pg.srno });
+      oneRow.push({ name: "srno", readOnly: true, value: pg.srno });
 
       //don't confuse DataSheet's {value, component} with Select control's {label, value}
       //product selection
       oneRow.push({
-        name: COL_PRODUCT_NAME,
-        value: pg.product_name,
+        name: "product_name",
+        value: pg.product.name,
         component: GenerateProductDropDownForGrid({
           srno: pg.srno,
-          value: pg.product_id,
-          label: pg.product_name
+          value: pg.product.id,
+          label: pg.product.name
         })
       });
 
       //qty
-      oneRow.push({ name: COL_QTY, value: pg.qty });
+      oneRow.push({ name: "qty", value: pg.qty });
 
       //mrp
       oneRow.push({
-        name: COL_MRP,
+        name: "mrp",
         value: pg.mrp,
         valueViewer: AmountFormatter
       });
 
       //qty x mrp
-      oneRow.push({ name: COL_QTY_MRP, readOnly: true, value: pg.qty_mrp });
+      oneRow.push({ name: "qty_mrp", readOnly: true, value: pg.qty_mrp });
 
       return oneRow;
     });
@@ -132,12 +179,13 @@ export default function PurchaseForm(props) {
     e.preventDefault();
 
     const oneNewRow = {
-      [COL_SRNO]: purchaseGrid.length + 1,
-      [COL_PRODUCT_NAME]: "",
-      [COL_PRODUCT_ID]: "",
-      [COL_QTY]: "",
-      [COL_MRP]: "",
-      [COL_QTY_MRP]: ""
+      id: "",
+      srno: purchaseGrid.length + 1,
+      product: { id: "", name: "" },
+      product_id: "",
+      qty: "",
+      mrp: "",
+      qty_mrp: ""
     };
 
     let purchaseGridCopy = purchaseGrid.map((pg, i) => pg);
@@ -148,28 +196,28 @@ export default function PurchaseForm(props) {
 
   //re-calculate totalAmount
   function recalculateTotalAmount(pGrid) {
-    const amount = pGrid.reduce((a, c) => a + c.qty_mrp, 0);
+    const amount = pGrid.reduce((a, c) => a + Number(c.qty_mrp), 0);
     const disPercentage = Number(discountPercentageField.value);
     const disAmount = amount * (disPercentage / 100);
     const tot = amount - disAmount;
 
-    amountField.setValue(amount);
-    discountAmountField.setValue(disAmount);
-    totalField.setValue(tot);
+    setAmount(amount.toFixed(2));
+    setDiscountAmount(disAmount.toFixed(2));
+    setTotal(tot.toFixed(2));
   }
 
   //drop down on Grid
   function GenerateProductDropDownForGrid({ srno, value, label }) {
     return (
       <Selection
+        autoFocus={true}
         ApiUrl="products/search"
         value={{ value, label }}
         onChange={opt => {
           UpdatePurchaseGridValues(
             srno,
             {
-              product_name: opt.name,
-              product_id: opt.id,
+              product: { name: opt.name, id: opt.id },
               mrp: opt.price,
               qty: 1 //1 qty after select drop-down
             },
@@ -178,20 +226,6 @@ export default function PurchaseForm(props) {
         }}
         components={{ Menu, Option }}
       />
-      /*<Select
-        autofocus
-        openOnFocus
-        closeOnSelect
-        value={{ value, label }}
-        onChange={opt =>
-          UpdatePurchaseGridValues(srno, {
-            product_name: opt.label,
-            product_id: opt.value
-          })
-        }
-        options={options}
-        components={{ Menu, Option }}
-      />*/
     );
   }
 
@@ -232,15 +266,24 @@ export default function PurchaseForm(props) {
       bill_date: dateField.value,
       supplier_id: supplierField.value.id,
       purchase_grid: purchaseGrid,
-      amount: amountField.value,
+      amount: amount,
       discount_percentage: discountPercentageField.value,
-      discount_amount: discountAmountField.value,
-      tot: totalField.value
+      discount_amount: discountAmount,
+      tot: total
     };
     props.SubmitClick(values);
   }
 
   useEffect(() => {
+    //avoid first time to calculate after loading
+    //we have to show what is in DB, not the calculated values
+    //so, first time show the data from DB and bypass the calculate
+    //if user changes and values in textbox then only run the calculation
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
+
     recalculateTotalAmount(purchaseGrid);
   }, [discountPercentageField.value]);
 
@@ -302,11 +345,19 @@ export default function PurchaseForm(props) {
           <table className={props.className + " purchaseGrid"}>
             <thead>
               <tr>
-                <th className="header">SrNo</th>
+                <th className="header" width="50px">
+                  SrNo
+                </th>
                 <th className="header">Product</th>
-                <th className="header">Qty</th>
-                <th className="header">Mrp</th>
-                <th className="header">Qty x Mrp</th>
+                <th className="header" width="100px">
+                  Qty
+                </th>
+                <th className="header" width="100px">
+                  Mrp
+                </th>
+                <th className="header" width="100px">
+                  Qty x Mrp
+                </th>
               </tr>
             </thead>
             <tbody>{props.children}</tbody>
@@ -315,7 +366,7 @@ export default function PurchaseForm(props) {
         rowRenderer={({ row, cells, children }) => <tr>{children}</tr>}
         onCellsChanged={changes => {
           changes.forEach(({ cell, row, col, value }) => {
-            if (cell.name === COL_PRODUCT_NAME) {
+            if (cell.name === "product_name") {
               return;
             }
             const recalculationRequired = RecalculateColumns.includes(
@@ -328,26 +379,24 @@ export default function PurchaseForm(props) {
             );
           });
         }}
+        cellRenderer={PurchaseGridOneCell}
+        /*selected={{
+          start: { i: selectedRowCol.start.i, j: selectedRowCol.start.j },
+          end: { i: selectedRowCol.end.i, j: selectedRowCol.end.j }
+        }}*/
+        //selected={selectedRowCol}
+        onSelect={({ start, end }) => {
+          //console.log(start, end);
+          //setSelectedRowCol({ start: start, end: end });
+        }}
       />
-      <button onClick={AddMoreRows}>Add rows</button>
+      <Button onClick={AddMoreRows}>Add rows</Button>
 
       <Row>
         <Column span="3">
           <label htmlFor="amount">Amount</label>
           <br />
-          <TextBox
-            type="number"
-            id="amount"
-            name="amount"
-            step="0.01"
-            min="0.01"
-            max="9999999"
-            ref={inputElementAmount}
-            onKeyDown={KeyDownEvent}
-            value={amountField.value}
-            onChange={amountField.onChange}
-            required
-          />
+          {amount}
         </Column>
 
         <Column span="3">
@@ -371,37 +420,13 @@ export default function PurchaseForm(props) {
         <Column span="3">
           <label htmlFor="discountAmount">Discount amount</label>
           <br />
-          <TextBox
-            type="number"
-            id="discountAmount"
-            name="discountAmount"
-            step="0.01"
-            min="0"
-            max="9999999"
-            ref={inputElementDiscountAmount}
-            onKeyDown={KeyDownEvent}
-            value={discountAmountField.value}
-            onChange={discountAmountField.onChange}
-            required
-          />
+          {discountAmount}
         </Column>
 
         <Column span="3">
           <label htmlFor="total">Total</label>
           <br />
-          <TextBox
-            type="number"
-            id="total"
-            name="total"
-            step="0.01"
-            min="0.01"
-            max="9999999"
-            ref={inputElementTotal}
-            onKeyDown={KeyDownEvent}
-            value={totalField.value}
-            onChange={totalField.onChange}
-            required
-          />
+          {total}
         </Column>
       </Row>
 

@@ -6,6 +6,7 @@ import PurchaseView from "./PurchaseView";
 import PurchaseList from "./PurchaseList";
 import PurchaseFormEdit from "./PurchaseFormEdit";
 import PurchaseFormNew from "./PurchaseFormNew";
+import PurchasePrint from "./PurchasePrint";
 
 export default function Purchase({ match }) {
   return (
@@ -21,6 +22,7 @@ export default function Purchase({ match }) {
         path={`${match.url}/edit/:PurchaseId`}
         component={PurchaseFormEdit}
       />
+      <Route path={`${match.url}/print/:PurchaseId`} component={PurchasePrint} />
       <Route
         exact
         path={match.url}

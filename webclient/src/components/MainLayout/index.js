@@ -1,6 +1,6 @@
 import React from "react";
 
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 
 import Home from "./../Home";
 import Product from "./../product";
@@ -11,8 +11,8 @@ export default function MainLayout() {
     <Router>
       <div>
         <Link to="/">Home</Link> &nbsp;
-        <Link to="/product">Product</Link>  &nbsp;
-        <Link to="/purchase">Purchase</Link>
+        <NavLink to="/product">Product</NavLink>  &nbsp;
+        <NavLink to="/purchase">Purchase</NavLink>
 
         <hr />
 

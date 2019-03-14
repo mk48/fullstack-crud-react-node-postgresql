@@ -32,6 +32,7 @@ export const Button = styled.button`
 export const TextBox = styled.input`
   padding: 6px 10px;
   font-size: 15px;
+  box-sizing: border-box;
 `;
 
 export const Radio = styled.input`

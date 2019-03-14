@@ -14,7 +14,7 @@ const InitialData = {
     id: "",
     name: ""
   },
-  purchase_grid: [],
+  purchase_grids: [],
   amount: 0,
   discount_percentage: 0,
   discount_amount: 0,

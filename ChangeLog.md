@@ -1,3 +1,11 @@
+### 2019-03-14
+* purchase grid - increase row height
+* purchase - remove textboxes of amount, discount amount, total replaced with simple label
+
+### 2019-03-13
+* purchase grid - focus to product dropdown on keypress
+* report - show on ui
+
 ### 2019-03-06
 * purchase - all crud screens - view, add, list (edit is pending)
 

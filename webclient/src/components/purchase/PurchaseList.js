@@ -68,6 +68,7 @@ const Columns = [
       return (
         <div>
           <Link to={`view/${data.row.original.id}`}>View</Link>
+          <Link to={`print/${data.row.original.id}`}>Print</Link>
           <Link to={`edit/${data.row.original.id}`}>Edit</Link>
         </div>
       );

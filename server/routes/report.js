@@ -6,7 +6,7 @@ const uuidv4 = require("uuid/v4");
 const jsreport = require("jsreport-core")();
 jsreport.init();
 
-router.get("/test", async function(req, res, next) {
+router.get("/testpdf", async function(req, res, next) {
   try {
     const resp = await jsreport.render({
       template: {
@@ -32,6 +32,26 @@ router.get("/test", async function(req, res, next) {
       stream.end();
       res.download(filePath);
     });
+  } catch (e) {
+    res.status(401).json(e.toString());
+  }
+});
+
+router.get("/testhtml", async function(req, res, next) {
+  try {
+    const resp = await jsreport.render({
+      template: {
+        content: "<h1>Hello {{foo}}</h1>",
+        engine: "handlebars",
+        recipe: "html"
+      },
+      data: {
+        foo: "world"
+      }
+    });
+
+    res.json({report: resp.content.toString()});
+   
   } catch (e) {
     res.status(401).json(e.toString());
   }
