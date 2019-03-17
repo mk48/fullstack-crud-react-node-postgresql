@@ -14,7 +14,7 @@ export default function PurchasePrint({ match }) {
   const getPurchaseApi = useDataApi("get", "report/testhtml", null);
 
   useEffect(() => {
-    getPurchaseApi.fetchData();
+    getPurchaseApi.doFetch();
   }, []);
 
   const data = getPurchaseApi.data;

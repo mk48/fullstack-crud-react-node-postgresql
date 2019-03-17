@@ -5,7 +5,20 @@ import useDataApi from "../Common/DataApi/useDataApi";
 import { Today } from "./../../util/date";
 
 //private
-import PurchaseForm from "./PurchaseForm";
+import PurchaseForm from "./Form/PurchaseForm";
+
+const InitialGridCount = 5;
+const purchase_grids = [];
+for (let index = 1; index <= InitialGridCount; index++) {
+  purchase_grids.push({
+    id: "",
+    srno: index,
+    product: { id: "", name: "" },
+    mrp: "",
+    qty: "",
+    qty_mrp: ""
+  });
+}
 
 const InitialData = {
   billno: "",
@@ -14,7 +27,7 @@ const InitialData = {
     id: "",
     name: ""
   },
-  purchase_grids: [],
+  purchase_grids: purchase_grids,
   amount: 0,
   discount_percentage: 0,
   discount_amount: 0,
@@ -29,12 +42,27 @@ export default function PurchaseFormNew() {
 
   async function SavePurchase(data) {
     setIsSuccess(false);
-    await savePurchaseApi.fetchData(data);
+    await savePurchaseApi.doFetch(data);
+    console.log("after save...");
     if (!savePurchaseApi.isError) {
+      console.log("before clear...");
       setData({ ...InitialData });
       setIsSuccess(true);
       setLastUpdate(new Date());
     }
+  }
+
+  let AddedOutput = null;
+  if (savePurchaseApi.isLoading) {
+    AddedOutput = <div>Adding...</div>;
+  } else if (savePurchaseApi.isError) {
+    AddedOutput = <div>Error occured while saving...</div>;
+  } else if (isSuccess) {
+    AddedOutput = (
+      <div>
+        Purchase saved successfully, you can continue adding new Purchases.
+      </div>
+    );
   }
 
   return (
@@ -45,13 +73,7 @@ export default function PurchaseFormNew() {
         data={data}
         SubmitClick={SavePurchase}
       />
-      {savePurchaseApi.loading && <div>Adding...</div>}
-      {savePurchaseApi.isError && <div>Error occured while saving...</div>}
-      {isSuccess && (
-        <div>
-          Purchase saved successfully, you can continue adding new Purchases.
-        </div>
-      )}
+      {AddedOutput}
     </React.Fragment>
   );
 }

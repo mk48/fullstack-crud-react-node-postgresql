@@ -43,6 +43,9 @@ router.post("/", async function(req, res, next) {
   const discount_amount = req.body.discount_amount;
   const tot = req.body.tot;
 
+  //generate error for testing
+  res.status(401).json({res: false});
+
   let T;
 
   try {
@@ -104,6 +107,9 @@ router.post("/update", async function(req, res, next) {
   const discount_amount = req.body.discount_amount;
   const tot = req.body.tot;
 
+    //generate error for testing
+    res.status(401).json({res: false});
+    
   let T;
 
   try {

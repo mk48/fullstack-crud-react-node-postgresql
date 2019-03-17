@@ -11,7 +11,7 @@ export default function PurchaseView({ match }) {
   const getPurchaseApi = useDataApi("get", "purchase", null);
 
   useEffect(() => {
-    getPurchaseApi.fetchData({ id: match.params.PurchaseId });
+    getPurchaseApi.doFetch({ id: match.params.PurchaseId });
   }, [match.params.PurchaseId]);
 
   const data = getPurchaseApi.data;

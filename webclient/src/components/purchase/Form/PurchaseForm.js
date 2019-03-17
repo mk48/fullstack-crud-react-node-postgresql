@@ -1,103 +1,27 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactDataSheet from "react-datasheet";
 import "react-datasheet/lib/react-datasheet.css";
-import { components } from "react-select";
 
 //style component
-import { Row, Column } from "./../style/grid";
-import { TextBox, Button } from "./../style/form";
+import { Row, Column } from "../../style/grid";
+import { TextBox, Button } from "../../style/form";
 
 //local
-import Selection from "./../Common/Selection";
-import { useFormInput, useFormInputSelection } from "./../Common/FormHooks";
+import Selection from "../../Common/Selection";
+import { useFormInput, useFormInputSelection } from "../../Common/FormHooks";
 
 //private
-import "./style.css";
-
+import "./../style.css";
+import {RecalculateRow} from "./util";
+import {AmountFormatter, PurchaseGridOneCell} from "./GridComponents"
+import {Menu, Option} from "./ProductSelectionDropDownComponents";
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//bottom part of selection drop-down
-const Menu = props => (
-  <components.Menu {...props}>{props.children}</components.Menu>
-);
-
-const Option = props => (
-  <components.Option {...props}>{props.data.name}</components.Option>
-);
-
-function AmountFormatter(props) {
-  return <div>{props.value}</div>;
-}
-
-//re-calculate the row like, Amount = Mrp x Qty
-function RecalculateRow(grid, srno) {
-  const gridUpdated = grid.map((row, i) => {
-    if (row.srno === srno) {
-      return { ...row, qty_mrp: row.qty * row.mrp };
-    } else {
-      return row;
-    }
-  });
-  return gridUpdated;
-}
 
 //if any changes happen on thease columns, that row should be re-calculated
 //like, Qty. if any changes on Qty column, then amount should be re-calculated with QtyxMrp
 const RecalculateColumns = ["qty", "mrp"];
 
-function PurchaseGridOneCell(props) {
-  const {
-    Tag,
-    cell,
-    row,
-    col,
-    columns,
-    attributesRenderer,
-    selected,
-    editing,
-    updated,
-    style,
-    ...rest
-  } = props;
-
-  const attributes = cell.attributes || {};
-
-  // ignore default style handed to us by the component and roll our own
-  attributes.style = { padding: 5 };
-
-  return (
-    <td {...rest} {...attributes}>
-      {props.children}
-    </td>
-  );
-}
-
-function NumberInputBox(props) {
-  const [n, setN] = useState(props.value);
-  const inputRef = useRef();
-
-  console.log(props.value);
-
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-
-  function onChange(e) {
-    props.onChange(e.target.value);
-    setN(e.target.value);
-  }
-
-  return (
-    <input
-      type="number"
-      className="data-editor"
-      ref={inputRef}
-      value={n}
-      onChange={onChange}
-      onKeyDown={props.onKeyDown}
-    />
-  );
-}
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -115,8 +39,8 @@ export default function PurchaseForm(props) {
   const [total, setTotal] = useState(props.data.tot);
 
   const [selectedRowCol, setSelectedRowCol] = useState({
-    start: { i: 0, j: 1 },
-    end: { i: 0, j: 1 }
+    start: { i: 0, j: 0 },
+    end: { i: 0, j: 0 }
   });
 
   //------------- element ref
@@ -260,12 +184,16 @@ export default function PurchaseForm(props) {
   }
 
   function handleSubmit(e) {
+    
+    //remove empty grid items
+    const pgItems = purchaseGrid.filter(pg => pg.product.id !== "")
+
     e.preventDefault();
     const values = {
       billno: billNoField.value,
       bill_date: dateField.value,
       supplier_id: supplierField.value.id,
-      purchase_grid: purchaseGrid,
+      purchase_grid: pgItems,
       amount: amount,
       discount_percentage: discountPercentageField.value,
       discount_amount: discountAmount,
@@ -337,7 +265,6 @@ export default function PurchaseForm(props) {
           />
         </Column>
       </Row>
-
       <ReactDataSheet
         data={GenerateGrid()}
         valueRenderer={cell => cell.value}
@@ -385,11 +312,9 @@ export default function PurchaseForm(props) {
           end: { i: selectedRowCol.end.i, j: selectedRowCol.end.j }
         }}*/
         //selected={selectedRowCol}
-        onSelect={({ start, end }) => {
-          //console.log(start, end);
-          //setSelectedRowCol({ start: start, end: end });
-        }}
+        //onSelect={selected => setSelectedRowCol(selected)}
       />
+      
       <Button onClick={AddMoreRows}>Add rows</Button>
 
       <Row>

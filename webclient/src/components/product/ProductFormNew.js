@@ -35,7 +35,7 @@ export default function ProductFormNew() {
   return (
     <React.Fragment>
       <ProductForm key={lastUpdate} mode="new" data={data} SubmitClick={SaveProduct} />
-      {saveProductApi.loading && <div>Adding...</div>}
+      {saveProductApi.isLoading && <div>Adding...</div>}
       {saveProductApi.isError && <div>Error occured while saving...</div>}
       {isSuccess && (
         <div>

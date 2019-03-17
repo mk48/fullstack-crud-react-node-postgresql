@@ -17,7 +17,7 @@ export const FormItem = styled.div`
 `;
 
 export const Button = styled.button`
-  background: ${props => (props.primary ? "rgb(28, 184, 65)" : "#e7e7e7")};
+  background: ${props => (props.primary ? "rgb(28, 184, 65)" : "#555555")};
   font-size: 16px;
   color: white;
   padding: 7px 15px;

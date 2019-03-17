@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 export function useFormInput(initialValue) {
   const [value, setValue] = useState(initialValue);
@@ -13,7 +13,6 @@ export function useFormInput(initialValue) {
     onChange: handleChange
   };
 }
-
 
 export function useFormCheckbox(initialValue) {
   const [value, setValue] = useState(initialValue);
@@ -39,4 +38,31 @@ export function useFormInputSelection(initialValue) {
     value,
     onChange: handleChange
   };
+}
+
+export function NumberInputBox(props) {
+  const [n, setN] = useState(props.value);
+  const inputRef = useRef();
+
+  console.log(props.value);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  function onChange(e) {
+    props.onChange(e.target.value);
+    setN(e.target.value);
+  }
+
+  return (
+    <input
+      type="number"
+      className="data-editor"
+      ref={inputRef}
+      value={n}
+      onChange={onChange}
+      onKeyDown={props.onKeyDown}
+    />
+  );
 }

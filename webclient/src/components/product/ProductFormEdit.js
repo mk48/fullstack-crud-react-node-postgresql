@@ -22,12 +22,12 @@ export default function ProductFormEdit({match}) {
 
   const data = getProductApi.data;
 
-  return getProductApi.loading || !data ? (
+  return getProductApi.isLoading || !data ? (
     <div>loading...</div>
   ) : (
     <React.Fragment>
       <ProductForm mode="edit" data={data} SubmitClick={UpdateProduct} />
-      {updateProductApi.loading && <div>Updating...</div>}
+      {updateProductApi.isLoading && <div>Updating...</div>}
       {updateProductApi.isError && <div>Error occured while saving...</div>}
       {isSuccess && (
         <div>
