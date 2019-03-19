@@ -8,15 +8,15 @@ import PurchaseForm from "./Form/PurchaseForm";
 
 export default function PurchaseFormEdit({ match }) {
   const [isSuccess, setIsSuccess] = useState(false);
-  const getPurchaseApi = useDataApi("get", "purchase", null);
-  const updatePurchaseApi = useDataApi("post", "purchase/update", {});
+  const getPurchaseApi = useDataApi("get", null);
+  const updatePurchaseApi = useDataApi("post", {});
 
   useEffect(() => {
-    getPurchaseApi.doFetch({ id: match.params.PurchaseId });
+    getPurchaseApi.doFetch("purchase", { id: match.params.PurchaseId });
   }, [match.params.PurchaseId]);
 
   const UpdatePurchase = async data => {
-    await updatePurchaseApi.doFetch({ ...data, id: match.params.PurchaseId });
+    await updatePurchaseApi.doFetch("purchase/update", { ...data, id: match.params.PurchaseId });
     setIsSuccess(true);
   };
 

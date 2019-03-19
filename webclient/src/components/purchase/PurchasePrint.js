@@ -11,10 +11,10 @@ export default function PurchasePrint({ match }) {
     
     //saveAs(`${SERVER_URL}/report/test`, "a.pdf");
 
-  const getPurchaseApi = useDataApi("get", "report/testhtml", null);
+  const getPurchaseApi = useDataApi("get", null);
 
   useEffect(() => {
-    getPurchaseApi.doFetch();
+    getPurchaseApi.doFetch("report/testhtml");
   }, []);
 
   const data = getPurchaseApi.data;

@@ -38,17 +38,18 @@ export default function PurchaseFormNew() {
   const [data, setData] = useState(InitialData);
   const [lastUpdate, setLastUpdate] = useState(Today());
   const [isSuccess, setIsSuccess] = useState(false);
-  const savePurchaseApi = useDataApi("post", "purchase", {});
+  const savePurchaseApi = useDataApi("post", {});
 
   async function SavePurchase(data) {
     setIsSuccess(false);
-    await savePurchaseApi.doFetch(data);
-    console.log("after save...");
-    if (!savePurchaseApi.isError) {
-      console.log("before clear...");
+
+    try {
+      await savePurchaseApi.doFetch("purchase", data);
       setData({ ...InitialData });
       setIsSuccess(true);
       setLastUpdate(new Date());
+    } catch (e) {
+      //what ever need to be done will be done in the render (below methods)
     }
   }
 

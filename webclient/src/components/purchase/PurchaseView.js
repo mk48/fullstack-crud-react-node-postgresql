@@ -8,10 +8,10 @@ import { Table } from "./../style/table";
 import useDataApi from "../Common/DataApi/useDataApi";
 
 export default function PurchaseView({ match }) {
-  const getPurchaseApi = useDataApi("get", "purchase", null);
+  const getPurchaseApi = useDataApi("get", null);
 
   useEffect(() => {
-    getPurchaseApi.doFetch({ id: match.params.PurchaseId });
+    getPurchaseApi.doFetch("purchase", { id: match.params.PurchaseId });
   }, [match.params.PurchaseId]);
 
   const data = getPurchaseApi.data;

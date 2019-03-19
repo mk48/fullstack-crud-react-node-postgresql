@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useState, useReducer, useEffect, useRef } from "react";
 import axios from "axios";
 
 //const
@@ -33,32 +33,67 @@ const dataFetchReducer = (state, action) => {
   }
 };
 
-const useDataApi = (apiMethod, url, initialData) => {
+const useDataApi = (apiMethod, initialData) => {
+  const [url, setUrl] = useState("");
+  const [toServer, setToServer] = useState({});
+  const reject = useRef(null);
+  const resolve = useRef(null);
+
   const [state, dispatch] = useReducer(dataFetchReducer, {
     isLoading: false,
     isError: false,
     data: initialData
   });
 
-  const doFetch = async toServer => {
-    dispatch({ type: "FETCH_INIT" });
+  useEffect(() => {
+    let didCancel = false;
 
-    const fullURL = `${SERVER_URL}/${url}`;
+    const fetchData = async () => {
+      dispatch({ type: "FETCH_INIT" });
 
-    try {
-      let result;
-      if (apiMethod === "post") {
-        result = await axios.post(fullURL, toServer);
-      } else if (apiMethod === "get") {
-        result = await axios.get(fullURL, { params: toServer });
+      try {
+        const fullURL = `${SERVER_URL}/${url}`;
+        let result;
+        
+        console.log("api request...");
+
+        if (apiMethod === "post") {
+          result = await axios.post(fullURL, toServer);
+        } else if (apiMethod === "get") {
+          result = await axios.get(fullURL, { params: toServer });
+        }
+
+        if (!didCancel) {
+          dispatch({ type: "FETCH_SUCCESS", payload: result.data });
+          resolve.current(result.data);
+        }
+      } catch (error) {
+        if (!didCancel) {
+          dispatch({ type: "FETCH_FAILURE" });
+          reject.current(error);
+        }
       }
-      
-      dispatch({ type: "FETCH_SUCCESS", payload: result.data });
-      
-    } catch (error) {      
-      dispatch({ type: "FETCH_FAILURE" });
-      console.log("error...", state);
+    };
+
+    if (url !== "") {
+      fetchData();
     }
+
+    return () => {
+      didCancel = true;
+    };
+  }, [url, toServer]);
+
+  const doFetch = (url, toserver) => {
+    setUrl(url);
+    setToServer(toserver);
+    
+    const promise = new Promise((res, rej) => {
+      resolve.current = res;
+      reject.current = rej;
+    });
+    
+    return promise;
   };
 
   return { ...state, doFetch };
