@@ -9,7 +9,7 @@ router.get("/search", async function(req, res, next) {
     const rows = await models.category.findAll({
       attributes: [["id", "value"], ["name", "label"]],
       where: {
-        name: { [models.Sequelize.Op.like]: `%${name}%` }
+        name: { [models.Sequelize.Op.iLike]: `%${name}%` }
       }
     });
 

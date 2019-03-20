@@ -1,3 +1,10 @@
+### 2019-03-20
+* apply redux style useReducer() for Product form
+
+### 2019-03-19
+* debounce in react select
+* case in-sensitive query
+
 ### 2019-03-14
 * purchase grid - increase row height
 * purchase - remove textboxes of amount, discount amount, total replaced with simple label

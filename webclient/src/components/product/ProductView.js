@@ -7,10 +7,10 @@ import { Row, Column } from "./../style/grid";
 import useDataApi from "../Common/DataApi/useDataApi";
 
 export default function ProductView({match}) {
-  const getProductApi = useDataApi("get", "products", null);
+  const getProductApi = useDataApi("get", null);
 
   useEffect(() => {
-    getProductApi.fetchData({ id: match.params.ProductId });
+    getProductApi.doFetch("products", { id: match.params.ProductId });
   }, [match.params.ProductId]);
 
   const data = getProductApi.data;

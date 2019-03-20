@@ -5,7 +5,8 @@ import { Route, Link } from "react-router-dom";
 import ProductView from "./ProductView";
 import ProductList from "./ProductList";
 import ProductFormEdit from "./ProductFormEdit";
-import ProductFormNew from "./ProductFormNew";
+//import ProductFormNew from "./ProductFormNew";
+import ProductForm from "./Form/ProductForm";
 
 export default function Product({ match }) {
   return (
@@ -15,7 +16,7 @@ export default function Product({ match }) {
       <Link to={`${match.url}/new`}>Add new</Link>
       <hr />
       <Route path={`${match.url}/list`} component={ProductList} />
-      <Route path={`${match.url}/new`} component={ProductFormNew} />
+      <Route path={`${match.url}/new`} component={ProductForm} />
       <Route path={`${match.url}/view/:ProductId`} component={ProductView} />
       <Route
         path={`${match.url}/edit/:ProductId`}

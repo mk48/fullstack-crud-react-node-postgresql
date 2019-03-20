@@ -22,7 +22,7 @@ export function PurchaseGridOneCell(props) {
   const attributes = cell.attributes || {};
 
   // ignore default style handed to us by the component and roll our own
-  attributes.style = { padding: 5 };
+  attributes.style = { padding: 8 };
 
   return (
     <td {...rest} {...attributes}>

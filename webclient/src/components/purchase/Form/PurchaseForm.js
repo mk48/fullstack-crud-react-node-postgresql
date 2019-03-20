@@ -26,6 +26,7 @@ const RecalculateColumns = ["qty", "mrp"];
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 export default function PurchaseForm(props) {
+  const [processingForm, setProcessingForm] = useState(false);
   const billNoField = useFormInput(props.data.billno);
   const dateField = useFormInput(props.data.bill_date);
   const supplierField = useFormInputSelection({
@@ -136,6 +137,7 @@ export default function PurchaseForm(props) {
       <Selection
         autoFocus={true}
         ApiUrl="products/search"
+        minimumInputLength={2}
         value={{ value, label }}
         onChange={opt => {
           UpdatePurchaseGridValues(
@@ -183,12 +185,14 @@ export default function PurchaseForm(props) {
     }
   }
 
-  function handleSubmit(e) {
-    
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    setProcessingForm(true);
+
     //remove empty grid items
     const pgItems = purchaseGrid.filter(pg => pg.product.id !== "")
 
-    e.preventDefault();
     const values = {
       billno: billNoField.value,
       bill_date: dateField.value,
@@ -199,7 +203,10 @@ export default function PurchaseForm(props) {
       discount_amount: discountAmount,
       tot: total
     };
-    props.SubmitClick(values);
+
+    await props.SubmitClick(values);
+
+    setProcessingForm(false);
   }
 
   useEffect(() => {
@@ -254,6 +261,7 @@ export default function PurchaseForm(props) {
             ApiUrl="supplier/search"
             id="category"
             name="category"
+            minimumInputLength={2}
             value={{
               value: supplierField.value,
               label: supplierField.value.name
@@ -356,8 +364,8 @@ export default function PurchaseForm(props) {
       </Row>
 
       <Row>
-        <Button primary type="submit" ref={inputElementSubmit}>
-          {props.mode}
+        <Button primary type="submit" ref={inputElementSubmit} disabled={processingForm}>
+         {processingForm ? "..." : props.mode}
         </Button>
       </Row>
     </form>

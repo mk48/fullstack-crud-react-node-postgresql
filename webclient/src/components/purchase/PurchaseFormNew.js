@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 
 //local
 import useDataApi from "../Common/DataApi/useDataApi";
@@ -40,18 +40,21 @@ export default function PurchaseFormNew() {
   const [isSuccess, setIsSuccess] = useState(false);
   const savePurchaseApi = useDataApi("post", {});
 
-  async function SavePurchase(data) {
-    setIsSuccess(false);
+  const SavePurchase = useCallback(
+    async data => {
+      setIsSuccess(false);
 
-    try {
-      await savePurchaseApi.doFetch("purchase", data);
-      setData({ ...InitialData });
-      setIsSuccess(true);
-      setLastUpdate(new Date());
-    } catch (e) {
-      //what ever need to be done will be done in the render (below methods)
-    }
-  }
+      try {
+        await savePurchaseApi.doFetch("purchase", data);
+        setData({ ...InitialData });
+        setIsSuccess(true);
+        setLastUpdate(new Date());
+      } catch (e) {
+        //what ever need to be done will be done in the render (below methods)
+      }
+    },
+    [data]
+  );
 
   let AddedOutput = null;
   if (savePurchaseApi.isLoading) {

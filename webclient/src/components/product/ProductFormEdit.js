@@ -8,15 +8,15 @@ import ProductForm from "./ProductForm";
 
 export default function ProductFormEdit({match}) {
   const [isSuccess, setIsSuccess] = useState(false);
-  const getProductApi = useDataApi("get", "products", null);
-  const updateProductApi = useDataApi("post", "products/update", {});
+  const getProductApi = useDataApi("get", null);
+  const updateProductApi = useDataApi("post",  {});
 
   useEffect(() => {
-    getProductApi.fetchData({ id: match.params.ProductId });
+    getProductApi.doFetch("products", { id: match.params.ProductId });
   }, [match.params.ProductId]);
 
   const UpdateProduct = async data => {
-    await updateProductApi.fetchData({ ...data, id: match.params.ProductId });
+    await updateProductApi.doFetch("products/update", { ...data, id: match.params.ProductId });
     setIsSuccess(true);
   };
 

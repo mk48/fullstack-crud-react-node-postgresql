@@ -153,7 +153,7 @@ router.get("/search", async function(req, res, next) {
     const rows = await models.product.findAll({
       attributes: ["id", "name", "price"],
       where: {
-        name: { [models.Sequelize.Op.like]: `%${name}%` }
+        name: { [models.Sequelize.Op.iLike]: `%${name}%` }
       }
     });
 
