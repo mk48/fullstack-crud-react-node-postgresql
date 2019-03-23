@@ -1,7 +1,13 @@
 import {
+  LOAD_INIT,
+  LOAD_ERROR,
+  LOAD_SUCCESS,
   SAVE_INIT,
   SAVE_SUCCESS,
   SAVE_ERROR,
+  UPDATE_INIT,
+  UPDATE_ERROR,
+  UPDATE_SUCCESS,
   NAME_CHANGE,
   CATEGORY_CHANGE,
   EXPIRY_CHANGE,
@@ -17,6 +23,7 @@ export default function reducer(state, action) {
   //console.log(action.type);
 
   switch (action.type) {
+    //=============================== Input Fields ===============================
     case NAME_CHANGE:
       return {
         ...state,
@@ -59,6 +66,7 @@ export default function reducer(state, action) {
         description: action.data
       };
 
+    //=============================== SAVE ===============================
     case SAVE_INIT:
       return {
         ...state,
@@ -78,6 +86,49 @@ export default function reducer(state, action) {
       return {
         ...state,
         isProcessing: false,
+        isError: true
+      };
+
+    //=============================== UPDATE ===============================
+    case UPDATE_INIT:
+      return {
+        ...state,
+        isProcessing: true,
+        isError: false,
+        message: false
+      };
+    case UPDATE_SUCCESS:
+      return {
+        ...state,
+        isProcessing: false,
+        isError: false,
+        message: "Updated successfully"
+      };
+    case UPDATE_ERROR:
+      return {
+        ...state,
+        isProcessing: false,
+        isError: true
+      };
+
+    //=============================== LOAD ===============================
+    case LOAD_INIT:
+      return {
+        ...state,
+        isLoading: true,
+        message: false
+      };
+    case LOAD_SUCCESS:
+      return {
+        ...state,
+        ...action.data,
+        isLoading: false,
+        isError: false
+      };
+    case LOAD_ERROR:
+      return {
+        ...state,
+        isLoading: false,
         isError: true
       };
     default:

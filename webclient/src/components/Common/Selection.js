@@ -27,7 +27,7 @@ export default function Selection(props) {
   async function loadValuesFromDB(inputValue) {
     if (inputValue.length >= props.minimumInputLength) {
       try {
-        //console.log("for drop down : input value = " + inputValue);
+        console.log("for drop down : input value = " + inputValue);
         const values = await axios.get(`${SERVER_URL}/${props.ApiUrl}`, {
           params: { name: inputValue }
         });

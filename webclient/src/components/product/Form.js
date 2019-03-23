@@ -1,36 +1,50 @@
-import React, { useRef, useEffect, useState } from "react";
-
-//Libs
+import React, { useReducer, useRef, useEffect } from "react";
 
 //Local
-import OptionButtonGroup from "./../Common/OptionButtonGroup";
-import Selection from "./../Common/Selection";
-import {
-  useFormInput,
-  useFormCheckbox,
-  useFormInputSelection
-} from "./../Common/FormHooks";
+import OptionButtonGroup from "../Common/OptionButtonGroup";
+import Selection from "../Common/Selection";
 
 //style component
-import { Column } from "./../style/grid";
-import { FormRow, Button, TextBox } from "./../style/form";
+import { Column } from "../style/grid";
+import { FormRow, Button, TextBox } from "../style/form";
+
+//State management components
+import reducerMiddleware from "./State/reducerMiddleware";
+import reducer from "./State/reducer";
+import { initialState } from "./State/initialState";
+import {
+  NAME_CHANGE,
+  CATEGORY_CHANGE,
+  EXPIRY_CHANGE,
+  IS_EXPIRY_CHANGE,
+  PRICE_CHANGE,
+  SIZE_CHANGE,
+  DESCRIPTION_CHANGE,
+  SAVE_INIT,
+  LOAD_INIT,
+  UPDATE_INIT
+} from "./State/actionTypes";
+import { save, load, update } from "./State/actionCreator";
 
 const sizeItems = [
   {
-    value: "1",
+    value: 1,
     description: "Small"
   },
   {
-    value: "2",
+    value: 2,
     description: "Medium"
   },
   {
-    value: "3",
+    value: 3,
     description: "Large"
   }
 ];
 
-export default function ProductForm(props) {
+export default function Form({ match }) {
+  const [state, dispatchBase] = useReducer(reducer, initialState);
+  const dispatch = reducerMiddleware(dispatchBase);
+
   const inputElementName = useRef(null);
   const inputElementCategory = useRef(null);
   const inputElementExpiryDate = useRef(null);
@@ -39,19 +53,6 @@ export default function ProductForm(props) {
   const inputElementSize = useRef(null);
   const inputElementDescription = useRef(null);
   const inputElementSubmit = useRef(null);
-
-  const nameField = useFormInput(props.data.name);
-  const categoryField = useFormInputSelection({
-    value: props.data.category_id,
-    label: props.data.category.name
-  });
-  const expiryField = useFormInput(props.data.expiry_date);
-  const isExpiryField = useFormCheckbox(props.data.is_expiry);
-  const priceField = useFormInput(props.data.price);
-  const sizeField = useFormInput(props.data.size);
-  const descriptionField = useFormInput(props.data.description);
-
-  const [processingForm, setProcessingForm] = useState(false);
 
   //add all elements into array, so that will move next
   let currentFocusElementIndex = 0;
@@ -67,23 +68,28 @@ export default function ProductForm(props) {
   ];
 
   useEffect(() => {
+    if (match.params.id) {
+      //if product id available means it's for edit mode
+      //load the product for edit
+      dispatch({ type: LOAD_INIT });
+      dispatch(load(match.params.id));
+    }
+
     inputElementName.current.focus();
   }, []);
 
   async function handleSubmit(e) {
-    setProcessingForm(true);
     e.preventDefault();
-    const values = {
-      name: nameField.value,
-      category: categoryField.value.value,
-      expiryDate: expiryField.value,
-      isExpiry: isExpiryField.checked,
-      price: priceField.value,
-      size: sizeField.value,
-      description: descriptionField.value
-    };
-    await props.SubmitClick(values);
-    setProcessingForm(false);
+
+    if (match.params.id) {
+      //edit mode
+      dispatch({ type: UPDATE_INIT });
+      dispatch(update(match.params.id, state));
+    } else {
+      //new mode
+      dispatch({ type: SAVE_INIT });
+      dispatch(save(state));
+    }
   }
 
   function KeyDownEvent(e) {
@@ -111,8 +117,10 @@ export default function ProductForm(props) {
             name="name"
             ref={inputElementName}
             onKeyDown={KeyDownEvent}
-            value={nameField.value}
-            onChange={nameField.onChange}
+            value={state.name}
+            onChange={e =>
+              dispatch({ type: NAME_CHANGE, data: e.target.value })
+            }
             required
           />
         </Column>
@@ -130,7 +138,13 @@ export default function ProductForm(props) {
             minimumInputLength={2}
             Ref={inputElementCategory}
             onInputKeyDown={KeyDownEvent}
-            {...categoryField}
+            value={{ value: state.category.id, label: state.category.name }}
+            onChange={e =>
+              dispatch({
+                type: CATEGORY_CHANGE,
+                data: { id: e.value, name: e.label }
+              })
+            }
           />
         </Column>
       </FormRow>
@@ -146,8 +160,10 @@ export default function ProductForm(props) {
             name="expiryDate"
             ref={inputElementExpiryDate}
             onKeyDown={KeyDownEvent}
-            value={expiryField.value}
-            onChange={expiryField.onChange}
+            value={state.expiry_date}
+            onChange={e =>
+              dispatch({ type: EXPIRY_CHANGE, data: e.target.value })
+            }
           />
         </Column>
       </FormRow>
@@ -163,8 +179,10 @@ export default function ProductForm(props) {
             name="isExpiry"
             ref={inputElementIsExpiry}
             onKeyDown={KeyDownEvent}
-            value={isExpiryField.value}
-            onChange={isExpiryField.onChange}
+            checked={state.is_expiry}
+            onChange={e =>
+              dispatch({ type: IS_EXPIRY_CHANGE, data: e.target.value })
+            }
           />
         </Column>
       </FormRow>
@@ -183,8 +201,10 @@ export default function ProductForm(props) {
             max="9999999"
             ref={inputElementPrice}
             onKeyDown={KeyDownEvent}
-            value={priceField.value}
-            onChange={priceField.onChange}
+            value={state.price}
+            onChange={e =>
+              dispatch({ type: PRICE_CHANGE, data: e.target.value })
+            }
           />
         </Column>
       </FormRow>
@@ -199,8 +219,10 @@ export default function ProductForm(props) {
             items={sizeItems}
             Ref={inputElementSize}
             onKeyDown={KeyDownEvent}
-            value={sizeField.value}
-            onChange={sizeField.onChange}
+            value={state.size}
+            onChange={e =>
+              dispatch({ type: SIZE_CHANGE, data: e.target.value })
+            }
           />
         </Column>
       </FormRow>
@@ -215,8 +237,10 @@ export default function ProductForm(props) {
             name="description"
             ref={inputElementDescription}
             onKeyDown={KeyDownEvent}
-            value={descriptionField.value}
-            onChange={descriptionField.onChange}
+            value={state.description}
+            onChange={e =>
+              dispatch({ type: DESCRIPTION_CHANGE, data: e.target.value })
+            }
           />
         </Column>
       </FormRow>
@@ -225,8 +249,17 @@ export default function ProductForm(props) {
         <Column span="3">-</Column>
         <Column span="9">
           <Button primary type="submit" ref={inputElementSubmit}>
-            {processingForm ? "..." : props.mode}
+            {match.params.id ? "Edit" : "Save"}
           </Button>
+        </Column>
+      </FormRow>
+
+      <FormRow>
+        <Column span="12">
+          {state.isLoading && <div>Loading...</div>}
+          {state.isProcessing && <div>Adding...</div>}
+          {state.isError && <div>Error occured while saving...</div>}
+          {state.message && <div>{state.message}</div>}
         </Column>
       </FormRow>
     </form>

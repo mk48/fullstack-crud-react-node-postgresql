@@ -13,7 +13,8 @@ export const initialFormState = {
 export const initialState = {
   ...initialFormState,
 
-  isProcessing: false,
+  isLoading: false,   //loading data from DB
+  isProcessing: false, //sending data to DB
   isError: false,
   message: false
 };

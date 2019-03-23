@@ -11,7 +11,7 @@ router.get("/", async function(req, res, next) {
       include: [
         {
           model: models.category,
-          attributes: ["name"]
+          attributes: ["id", "name"]
         }
       ]
     });
@@ -91,9 +91,9 @@ router.post("/query", async function(req, res, next) {
 
 router.post("/", async function(req, res, next) {
   const name = req.body.name;
-  const category = req.body.category;
-  const expiryDate = Date(req.body.expiryDate);
-  const isExpiry = Boolean(req.body.isExpiry);
+  const category_id = req.body.category_id;
+  const expiry_date = Date(req.body.expiry_date);
+  const is_expiry = Boolean(req.body.is_expiry);
   const price = req.body.price;
   const size = req.body.size;
   const description = req.body.description;
@@ -102,9 +102,9 @@ router.post("/", async function(req, res, next) {
     await models.product.create({
       id: uuidv4(),
       name: name,
-      category_id: category,
-      expiry_date: expiryDate,
-      is_expiry: isExpiry,
+      category_id: category_id,
+      expiry_date: expiry_date,
+      is_expiry: is_expiry,
       price: price,
       size: size,
       description: description
@@ -120,9 +120,9 @@ router.post("/", async function(req, res, next) {
 router.post("/update", async function(req, res, next) {
   const id = req.body.id;
   const name = req.body.name;
-  const category = req.body.category;
-  const expiryDate = Date(req.body.expiryDate);
-  const isExpiry = Boolean(req.body.isExpiry);
+  const category_id = req.body.category_id;
+  const expiry_date = Date(req.body.expiry_date);
+  const is_expiry = Boolean(req.body.is_expiry);
   const price = req.body.price;
   const size = req.body.size;
   const description = req.body.description;
@@ -130,9 +130,9 @@ router.post("/update", async function(req, res, next) {
   try {
     await models.product.update({
       name: name,
-      category_id: category,
-      expiry_date: expiryDate,
-      is_expiry: isExpiry,
+      category_id: category_id,
+      expiry_date: expiry_date,
+      is_expiry: is_expiry,
       price: price,
       size: size,
       description: description
