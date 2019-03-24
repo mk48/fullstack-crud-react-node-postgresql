@@ -1,3 +1,8 @@
+### 2019-03-24
+* useReducer() in all forms
+* move server code from route folder to new BL folder
+* search query seems more common - move to common folder under BL
+
 ### 2019-03-20
 * apply redux style useReducer() for Product form
 

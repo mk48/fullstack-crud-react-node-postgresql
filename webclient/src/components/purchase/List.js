@@ -2,25 +2,25 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 //libs
-import RTable from "../Common/ReactTable/Table";
+import RTable from "./../Common/ReactTable/Table";
+import { Input } from "./../Common/ReactTable/Styles";
 import { useTableState } from "react-table";
+
+//style component
+import { RightAlign } from "./../style/rightAlign";
 
 //local
 import useQueryDataApi from "../Common/DataApi/useQueryDataApi";
 import useDebouncedCallback from "../Common/useDebouncedCallback";
-import { Input } from "../Common/ReactTable/Styles";
 
 //const
-import { AUTOSUGGEST_DELAY } from "../../util/constant";
-
-//style component
-import { RightAlign } from "../style/rightAlign";
+import { AUTOSUGGEST_DELAY } from "./../../util/constant";
 
 const Columns = [
   //{ Header: "RowIndex", accessor: (row, index) => index, width: 100 },
   {
-    Header: "Product name",
-    accessor: "name",
+    Header: "Bill No",
+    accessor: "billno",
     minWidth: 150,
     Filter: header => {
       return (
@@ -32,48 +32,43 @@ const Columns = [
     }
   },
   {
-    Header: "Category",
-    accessor: "category_id",
-    Cell: data => <div>{data.row.original.category.name}</div>
+    Header: "Supplier",
+    accessor: "supplier_id",
+    Cell: data => <div>{data.row.original.supplier && data.row.original.supplier.name}</div>
   },
   {
-    Header: "Is expiry",
-    accessor: "is_expiry",
-    maxWidth: 70,
-    Cell: data => (data.value ? "✓" : "")
+    Header: "Date",
+    accessor: "bill_date",
+    maxWidth: 70
   },
   {
-    Header: "expiry date",
-    accessor: "expiry_date"
-  },
-  {
-    Header: "size",
-    accessor: "size",
-    maxWidth: 50
-  },
-  {
-    Header: "price",
-    accessor: "price",
+    Header: "Amount",
+    accessor: "amount",
     Cell: data => <RightAlign>{data.value}</RightAlign>
   },
-  /*{
-      Header: "Description",
-      accessor: "description",
-      Filter: header => {
-        return (
-          <Input
-            value={header.filterValue || ""}
-            onChange={e => header.setFilter(e.target.value)}
-          />
-        );
-      }
-    },*/
+  {
+    Header: "Discount %",
+    accessor: "discount_percentage",
+    maxWidth: 50,
+    Cell: data => <RightAlign>{data.value}</RightAlign>
+  },
+  {
+    Header: "Discount",
+    accessor: "discount_amount",
+    Cell: data => <RightAlign>{data.value}</RightAlign>
+  },
+  {
+    Header: "Total",
+    accessor: "tot",
+    Cell: data => <RightAlign>{data.value}</RightAlign>
+  },
   {
     Header: "Actions",
     Cell: data => {
       return (
         <div>
           <Link to={`view/${data.row.original.id}`}>View</Link>
+          <Link to={`print/${data.row.original.id}`}>Print</Link>
           <Link to={`edit/${data.row.original.id}`}>Edit</Link>
         </div>
       );
@@ -83,13 +78,18 @@ const Columns = [
 
 async function FetchData({
   setState,
-  listApi,
+  apiPurchaseBillList,
   sortBy,
   filters,
   pageIndex,
   pageSize
 }) {
-  const totalRows = await listApi.fetch(sortBy, filters, pageIndex, pageSize);
+  const totalRows = await apiPurchaseBillList.fetch(
+    sortBy,
+    filters,
+    pageIndex,
+    pageSize
+  );
 
   //console.log("TotRows = " + totalRows);
   const pageCount = Math.ceil(totalRows / pageSize);
@@ -99,8 +99,8 @@ async function FetchData({
   }));
 }
 
-export default function List() {
-  const listApi = useQueryDataApi("post", "products/query", []);
+export default function PurchaseList() {
+  const apiPurchaseBillList = useQueryDataApi("post", "purchase/query", []);
   const debouncedFetchData = useDebouncedCallback(
     FetchData,
     AUTOSUGGEST_DELAY,
@@ -115,7 +115,7 @@ export default function List() {
   useEffect(() => {
     debouncedFetchData({
       setState,
-      listApi,
+      apiPurchaseBillList,
       sortBy,
       filters,
       pageIndex,
@@ -125,10 +125,10 @@ export default function List() {
 
   return (
     <RTable
-      data={listApi.data}
+      data={apiPurchaseBillList.data}
       columns={Columns}
       state={tableState} // Pass the state to the table
-      loading={listApi.loading}
+      loading={apiPurchaseBillList.loading}
       manualSorting={true} // Manual sorting
       manualFilters={true} // Manual filters
       manualPagination={true} // Manual pagination

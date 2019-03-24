@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from "react";
 
 //style component
 import { Row, Column } from "../style/grid";
+import { Table } from "./../style/table";
 
 //State management components
 import reducerMiddleware from "./State/reducerMiddleware";
@@ -21,35 +22,58 @@ export default function ProductView({ match }) {
 
   return (
     <React.Fragment>
-      {state.isLoading && <div>Loading...</div>}
-      <Row>
-        <Column span="3">Name</Column>
-        <Column span="9">{state.name}</Column>
-      </Row>
-      <Row>
-        <Column span="3">Category</Column>
-        <Column span="9">{state.category.name}</Column>
-      </Row>
-      <Row>
-        <Column span="3">Price</Column>
-        <Column span="9">{state.price}</Column>
-      </Row>
-      <Row>
-        <Column span="3">Size</Column>
-        <Column span="9">{state.size}</Column>
-      </Row>
-      <Row>
-        <Column span="3">Is Expiry</Column>
-        <Column span="9">{state.is_expiry && "✓"}</Column>
-      </Row>
-      <Row>
-        <Column span="3">Expiry date</Column>
-        <Column span="9">{state.expiry_date}</Column>
-      </Row>
-      <Row>
-        <Column span="3">Description</Column>
-        <Column span="9">{state.description}</Column>
-      </Row>
-    </React.Fragment>
+    <Row>
+      <Column span="3">Bill No</Column>
+      <Column span="9">{state.billno}</Column>
+    </Row>
+    <Row>
+      <Column span="3">Date</Column>
+      <Column span="9">{state.bill_date}</Column>
+    </Row>
+    <Row>
+      <Column span="3">Supplier</Column>
+      <Column span="9">{state.supplier.name}</Column>
+    </Row>
+    <Row>
+      <Table>
+        <thead>
+          <tr>
+            <th>SrNo</th>
+            <th>Product</th>
+            <th>Mrp</th>
+            <th>Qty</th>
+            <th>Mrp x Qty</th>
+          </tr>
+        </thead>
+        <tbody>
+          {state.purchase_grids.map(item => (
+            <tr key={item.srno}>
+              <td>{item.srno}</td>
+              <td>{item.product.name}</td>
+              <td>{item.mrp}</td>
+              <td>{item.qty}</td>
+              <td>{item.qty_mrp}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </Row>
+    <Row>
+      <Column span="3">Amount</Column>
+      <Column span="9">{state.amount}</Column>
+    </Row>
+    <Row>
+      <Column span="3">Discount %</Column>
+      <Column span="9">{state.discount_percentage}</Column>
+    </Row>
+    <Row>
+      <Column span="3">Discount</Column>
+      <Column span="9">{state.discount_amount}</Column>
+    </Row>
+    <Row>
+      <Column span="3">Total</Column>
+      <Column span="9">{state.tot}</Column>
+    </Row>
+  </React.Fragment>
   );
 }

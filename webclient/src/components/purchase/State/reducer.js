@@ -49,8 +49,8 @@ export default function reducer(state, action) {
       return {
         ...state,
         discount_percentage: disPercentage,
-        discount_amount: disAmount,
-        tot: tot
+        discount_amount: disAmount.toFixed(2),
+        tot: tot.toFixed(2)
       };
 
     //=============================== Grid input Fields ===============================
@@ -74,7 +74,7 @@ export default function reducer(state, action) {
     case GRID_QTY_CHANGE: {
       const qty = Number(action.data.value);
       let purchaseGridUpdated = state.purchase_grids.map((pg, i) => {
-        if (pg.srno === action.data.srno + 1) {
+        if (pg.srno === action.data.row + 1) {
           return {
             ...pg,
             qty: qty,
@@ -91,7 +91,7 @@ export default function reducer(state, action) {
     case GRID_MRP_CHANGE: {
       const mrp = Number(action.data.value);
       let purchaseGridUpdated = state.purchase_grids.map((pg, i) => {
-        if (pg.srno === action.data.srno + 1) {
+        if (pg.srno === action.data.row + 1) {
           return {
             ...pg,
             mrp: mrp,
@@ -175,13 +175,15 @@ export default function reducer(state, action) {
   }
 }
 
+//-------------------------------- Private functions -----------------------------
+
 //re-calculate totalAmount
 function recalculateTotalAmount(state) {
   const amount = state.purchase_grids.reduce(
     (a, c) => a + Number(c.qty_mrp),
     0
   );
-  const disPercentage = Number(state.discount_percentage.value);
+  const disPercentage = Number(state.discount_percentage);
   const disAmount = amount * (disPercentage / 100);
   const tot = amount - disAmount;
 
@@ -189,6 +191,6 @@ function recalculateTotalAmount(state) {
     ...state,
     amount: amount.toFixed(2),
     discount_amount: disAmount.toFixed(2),
-    tot: tot
+    tot: tot.toFixed(2)
   };
 }

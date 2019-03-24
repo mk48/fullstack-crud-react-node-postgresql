@@ -1,17 +1,13 @@
-var express = require("express");
-var router = express.Router();
-var models = require("../models");
+const express = require("express");
+const router = express.Router();
+
+const categoryBL = require("./../bl/category");
 
 router.get("/search", async function(req, res, next) {
   const name = req.query.name;
 
   try {
-    const rows = await models.category.findAll({
-      attributes: [["id", "value"], ["name", "label"]],
-      where: {
-        name: { [models.Sequelize.Op.iLike]: `%${name}%` }
-      }
-    });
+    const rows = await categoryBL.Search(name);
 
     res.json(rows);
   } catch (e) {

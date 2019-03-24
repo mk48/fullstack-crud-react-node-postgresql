@@ -22,7 +22,7 @@ export default function reducerMiddleware(dispatch) {
     switch (action.type) {
       case SAVE:
         try {
-          await axios.post(`${SERVER_URL}/products`, action.data);
+          await axios.post(`${SERVER_URL}/purchase`, action.data);
           dispatch({ type: SAVE_SUCCESS });
         } catch (e) {
           dispatch({ type: SAVE_ERROR });
@@ -31,7 +31,7 @@ export default function reducerMiddleware(dispatch) {
 
       case LOAD:
         try {
-          const result = await axios.get(`${SERVER_URL}/products`, {
+          const result = await axios.get(`${SERVER_URL}/purchase`, {
             params: { id: action.data }
           });
           dispatch({ type: LOAD_SUCCESS, data: result.data });
@@ -42,7 +42,7 @@ export default function reducerMiddleware(dispatch) {
 
       case UPDATE:
         try {
-          await axios.post(`${SERVER_URL}/products/update`, action.data);
+          await axios.post(`${SERVER_URL}/purchase/update`, action.data);
           dispatch({ type: UPDATE_SUCCESS });
         } catch (e) {
           dispatch({ type: UPDATE_ERROR });

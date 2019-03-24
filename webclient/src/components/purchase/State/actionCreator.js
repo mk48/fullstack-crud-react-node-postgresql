@@ -19,14 +19,19 @@ export function update(id, state) {
 //============================================= local functions =======================
 
 function collectDatafromState(state) {
+  
+  //remove empty grid items
+  const pgItems = state.purchase_grids.filter(pg => pg.product.id !== "")
+
   const data = {
-    name: state.name,
-    category_id: state.category.id,
-    expiry_date: state.expiry_date,
-    is_expiry: state.is_expiry,
-    price: state.price,
-    size: state.size,
-    description: state.description
+    billno: state.billno,
+    bill_date: state.bill_date,
+    supplier_id: state.supplier.id,
+    purchase_grid: pgItems,
+    amount: state.amount,
+    discount_percentage: state.discount_percentage,
+    discount_amount: state.discount_amount,
+    tot: state.tot
   };
 
   return data;

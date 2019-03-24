@@ -34,7 +34,7 @@ const Columns = [
   {
     Header: "Category",
     accessor: "category_id",
-    Cell: data => <div>{data.row.original.category.name}</div>
+    Cell: data => <div>{data.row.original.category && data.row.original.category.name}</div>
   },
   {
     Header: "Is expiry",

@@ -5,6 +5,7 @@ import { Route, Link } from "react-router-dom";
 import View from "./View";
 import List from "./List";
 import Form from "./Form";
+import Print from "./Print";
 
 export default function ({ match }) {
   return (
@@ -17,6 +18,7 @@ export default function ({ match }) {
       <Route path={`${match.url}/view/:id`} component={View} />
       <Route path={`${match.url}/new`} component={Form} />      
       <Route path={`${match.url}/edit/:id`} component={Form} />
+      <Route path={`${match.url}/print/:id`} component={Print} />
       <Route
         exact
         path={match.url}

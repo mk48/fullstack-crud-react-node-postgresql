@@ -257,7 +257,7 @@ export default function Form({ match }) {
       <FormRow>
         <Column span="12">
           {state.isLoading && <div>Loading...</div>}
-          {state.isProcessing && <div>Adding...</div>}
+          {state.isProcessing && <div>Processing...</div>}
           {state.isError && <div>Error occured while saving...</div>}
           {state.message && <div>{state.message}</div>}
         </Column>
