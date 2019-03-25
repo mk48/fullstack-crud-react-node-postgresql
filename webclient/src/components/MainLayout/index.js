@@ -1,6 +1,13 @@
 import React from "react";
 
-import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  NavLink
+} from "react-router-dom";
+
+import NavBar from "./../NavBar";
 
 import Home from "./../Home";
 import Product from "./../product";
@@ -10,11 +17,7 @@ export default function MainLayout() {
   return (
     <Router>
       <div>
-        <Link to="/">Home</Link> &nbsp;
-        <NavLink to="/product">Product</NavLink>  &nbsp;
-        <NavLink to="/purchase">Purchase</NavLink>
-
-        <hr />
+        <NavBar />
 
         <Route exact path="/" component={Home} />
         <Route path="/product" component={Product} />

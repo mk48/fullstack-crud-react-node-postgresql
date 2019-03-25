@@ -9,10 +9,10 @@ import Form from "./Form";
 export default function ({ match }) {
   return (
     <div>
-      <b>Product</b> &nbsp;
+      {/*<b>Product</b> &nbsp;
       <Link to={`${match.url}/list`}>List all</Link> &nbsp;
       <Link to={`${match.url}/new`}>Add new</Link>
-      <hr />
+      <hr />*/}
       <Route path={`${match.url}/list`} component={List} />
       <Route path={`${match.url}/view/:id`} component={View} />
       <Route path={`${match.url}/new`} component={Form} />      

@@ -10,10 +10,6 @@ import Print from "./Print";
 export default function ({ match }) {
   return (
     <div>
-      <b>Purchase</b> &nbsp;
-      <Link to={`${match.url}/list`}>List all</Link> &nbsp;
-      <Link to={`${match.url}/new`}>Add new</Link>
-      <hr />
       <Route path={`${match.url}/list`} component={List} />
       <Route path={`${match.url}/view/:id`} component={View} />
       <Route path={`${match.url}/new`} component={Form} />      
