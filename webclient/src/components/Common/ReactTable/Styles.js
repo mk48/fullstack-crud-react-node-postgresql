@@ -2,15 +2,15 @@ import styled, { css } from "styled-components";
 
 export const Table = styled.div`
   display: block;
-  border-radius: 5px;
+  //border-radius: 5px;
   border: solid 1px #ddd;
   overflow: scroll;
 `;
 
 const RowBase = styled.div`
   display: flex;
-  border-bottom: solid 1px #ddd;
-
+  border-bottom: solid 1px #e1dddd;
+  
   :last-child {
     border-bottom: 0;
   }
@@ -20,19 +20,17 @@ export const Row = styled(RowBase)`
   ${props =>
     props.even &&
     css`
-      background: rgba(42, 117, 146, 0.12);
+      background: rgba(193, 195, 196, 0.12);
     `}
 `;
 
-export const HeaderRow = styled(RowBase)`
-  background: rgba(42, 117, 146, 1);
+export const HeaderRow = styled(RowBase)` 
   border-bottom: solid 1px rgba(0, 0, 0, 0.2);
-  color: white;
+  color: #232020;
 `;
 
 export const Pagination = styled(RowBase)`
-  background: rgba(42, 117, 146, 1);
-  color: white;
+   color: black;
 `;
 
 export const Cell = styled.div`
@@ -65,9 +63,8 @@ export const Header = styled(Cell)`
 export const Button = styled.button`
   font-size: 1rem;
   padding: 0.5rem 0.7rem;
-  background: white;
-  border-radius: 5px;
   cursor: pointer;
+  border:none;
 
   :disabled {
     opacity: 0.3;

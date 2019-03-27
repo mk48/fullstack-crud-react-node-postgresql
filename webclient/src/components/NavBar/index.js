@@ -1,11 +1,6 @@
 import React from "react";
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  NavLink
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 //style component
 import { Row, Column } from "../style/grid";
@@ -13,24 +8,34 @@ import { Row, Column } from "../style/grid";
 import Tab from "./../Common/Tab";
 import { KEY_USERNAME } from "../../util/constant";
 
+//style
+import { NavBarStyle, ToolbarButton } from "./style";
+
 export default function NavBar({ match }) {
   const userName = localStorage.getItem(KEY_USERNAME);
 
   return (
-    <Row>
-      <Column span="11">
-        <Tab>
-          <div tabId={1} label="Product">
-            <Link to="/product/list">List all</Link> &nbsp;
-            <Link to="/product/new">Add new</Link>
-          </div>
-          <div tabId={2} label="Purchase">
-            <Link to="/purchase/list">List all</Link> &nbsp;
-            <Link to="/purchase/new">Add new</Link>
-          </div>
-        </Tab>
-      </Column>
-      <Column span="1">{userName} - logout</Column>
-    </Row>
+    <NavBarStyle>
+      <Tab>
+        <div tabId={1} label="Product">
+          <Link to={"/product/list"}>
+            <ToolbarButton>List all</ToolbarButton>
+          </Link>
+          &nbsp;
+          <Link to={"/product/new"}>
+            <ToolbarButton>Add new</ToolbarButton>
+          </Link>
+        </div>
+        <div tabId={2} label="Purchase">
+          <Link to={"/purchase/list"}>
+            <ToolbarButton>List all</ToolbarButton>
+          </Link>{" "}
+          &nbsp;
+          <Link to={"/purchase/new"}>
+            <ToolbarButton>Add new</ToolbarButton>
+          </Link>
+        </div>
+      </Tab>
+    </NavBarStyle>
   );
 }
