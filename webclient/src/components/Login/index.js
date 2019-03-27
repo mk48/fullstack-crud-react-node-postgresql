@@ -1,4 +1,4 @@
-import React, { useReducer, useRef } from "react";
+import React, { useReducer, useRef, useEffect } from "react";
 
 //libs
 import axios from "axios";
@@ -120,6 +120,13 @@ export default function Login({ match, location, history }) {
     inputElementPassword,
     inputElementSubmit
   ];
+
+  useEffect(() => {
+    //at first time, clear any local storage
+    localStorage.removeItem(KEY_USERNAME);
+    localStorage.removeItem(KEY_ISLOGGEDIN);
+    localStorage.removeItem(KEY_SESSION_ID);
+  }, [])
 
   //------------------------------------ check login, if success then re-direct ---------------
   const { from } = location.state || { from: { pathname: "/home" } };
