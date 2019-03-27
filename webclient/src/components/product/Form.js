@@ -55,7 +55,7 @@ export default function Form({ match }) {
   const inputElementSubmit = useRef(null);
 
   //add all elements into array, so that will move next
-  let currentFocusElementIndex = 0;
+  let currentFocusElementIndex = useRef(0);
   const AllInputElements = [
     inputElementName,
     inputElementCategory,
@@ -95,11 +95,11 @@ export default function Form({ match }) {
   function KeyDownEvent(e) {
     if (e.keyCode === 13) {
       e.preventDefault();
-      currentFocusElementIndex++;
-      if (AllInputElements[currentFocusElementIndex]) {
-        AllInputElements[currentFocusElementIndex].current.focus();
+      currentFocusElementIndex.current++;
+      if (AllInputElements[currentFocusElementIndex.current]) {
+        AllInputElements[currentFocusElementIndex.current].current.focus();
       } else {
-        currentFocusElementIndex = 0;
+        currentFocusElementIndex.current = 0;
       }
     }
   }
