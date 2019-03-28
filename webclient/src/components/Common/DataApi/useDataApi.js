@@ -1,8 +1,5 @@
 import { useState, useReducer, useEffect, useRef } from "react";
-import axios from "axios";
-
-//const
-import { SERVER_URL } from "./../../../util/constant";
+import Axios from "./../../../util/Axios";
 
 //concept taken from
 //https://www.robinwieruch.de/react-hooks-fetch-data/
@@ -52,15 +49,15 @@ const useDataApi = (apiMethod, initialData) => {
       dispatch({ type: "FETCH_INIT" });
 
       try {
-        const fullURL = `${SERVER_URL}/${url}`;
+        const fullURL = `/${url}`;
         let result;
         
         console.log("api request...");
 
         if (apiMethod === "post") {
-          result = await axios.post(fullURL, toServer);
+          result = await Axios.post(fullURL, toServer);
         } else if (apiMethod === "get") {
-          result = await axios.get(fullURL, { params: toServer });
+          result = await Axios.get(fullURL, { params: toServer });
         }
 
         if (!didCancel) {

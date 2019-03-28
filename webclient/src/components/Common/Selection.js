@@ -1,14 +1,14 @@
 import React, { useRef } from "react";
 
 //Libs
-import axios from "axios";
+import Axios from "./../../util/Axios";
 import AsyncSelect from "react-select/lib/Async";
 
 //local
 import useDebouncedCallback from "./useDebouncedCallback";
 
 //const
-import { SERVER_URL, AUTOSUGGEST_DELAY } from "./../../util/constant";
+import { AUTOSUGGEST_DELAY } from "./../../util/constant";
 
 /*const options = [
   { value: "cho", label: "Chocolate" },
@@ -28,7 +28,7 @@ export default function Selection(props) {
     if (inputValue.length >= props.minimumInputLength) {
       try {
         console.log("for drop down : input value = " + inputValue);
-        const values = await axios.get(`${SERVER_URL}/${props.ApiUrl}`, {
+        const values = await Axios.get(`/${props.ApiUrl}`, {
           params: { name: inputValue }
         });
         //console.log(values);

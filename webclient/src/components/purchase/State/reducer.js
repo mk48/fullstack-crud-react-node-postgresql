@@ -14,10 +14,11 @@ import {
   DISCOUNT_PERCENTAGE_CHANGE,
   GRID_PRODUCT_CHANGE,
   GRID_MRP_CHANGE,
-  GRID_QTY_CHANGE
+  GRID_QTY_CHANGE,
+  ADD_ONE_PURCHASE_GRID_ROW
 } from "./actionTypes";
 
-import { initialFormState } from "./initialState";
+import { initialFormState, defaultValuesForGridItem } from "./initialState";
 
 export default function reducer(state, action) {
   //console.log(action.type);
@@ -103,6 +104,19 @@ export default function reducer(state, action) {
       });
       const st = { ...state, purchase_grids: purchaseGridUpdated };
       return recalculateTotalAmount(st);
+    }
+
+    //=============================== grid buttons ===============================
+    case ADD_ONE_PURCHASE_GRID_ROW: {
+      const nextSrNo = state.purchase_grids.length + 1;
+      const st = {
+        ...state,
+        purchase_grids: [
+          ...state.purchase_grids,
+          { ...defaultValuesForGridItem, srno: nextSrNo }
+        ]
+      };
+      return st;
     }
 
     //=============================== SAVE ===============================

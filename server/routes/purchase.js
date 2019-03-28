@@ -1,9 +1,10 @@
 var express = require("express");
 var router = express.Router();
+const Auth = require("../util/authenticate");
 
 const purchaseBL = require("./../bl/purchase");
 
-router.get("/", async function(req, res, next) {
+router.get("/", Auth.isAuthenticated, async function(req, res, next) {
   const id = req.query.id;
   try {
     const purchaseRow = await purchaseBL.Get(id);
@@ -14,7 +15,7 @@ router.get("/", async function(req, res, next) {
   }
 });
 
-router.post("/", async function(req, res, next) {
+router.post("/", Auth.isAuthenticated, async function(req, res, next) {
   const billno = req.body.billno;
   const bill_date = req.body.bill_date;
   const supplier_id = req.body.supplier_id;
@@ -42,7 +43,7 @@ router.post("/", async function(req, res, next) {
   }
 });
 
-router.post("/update", async function(req, res, next) {
+router.post("/update", Auth.isAuthenticated, async function(req, res, next) {
   const purchaseID = req.body.id;
   const billno = req.body.billno;
   const bill_date = req.body.bill_date;
@@ -72,7 +73,7 @@ router.post("/update", async function(req, res, next) {
   }
 });
 
-router.post("/query", async function(req, res, next) {
+router.post("/query", Auth.isAuthenticated, async function(req, res, next) {
   //sortBy, filters, pageIndex, pageSize
   const pageSize = req.body.pageSize;
   const pageIndex = req.body.pageIndex;

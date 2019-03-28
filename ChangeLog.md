@@ -1,3 +1,10 @@
+### 2019-03-28
+* authendication
+* login, logout 
+* send token id
+* verify with session table
+* secure reoutes in express js
+
 ### 2019-03-27
 * login form
 

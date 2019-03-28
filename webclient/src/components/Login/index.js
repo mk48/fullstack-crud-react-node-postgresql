@@ -1,7 +1,7 @@
 import React, { useReducer, useRef, useEffect } from "react";
 
 //libs
-import axios from "axios";
+import Axios, {SetToken} from "./../../util/Axios";
 import { Redirect } from "react-router-dom";
 
 //style component
@@ -9,7 +9,7 @@ import { Column } from "../style/grid";
 import { FormRow, Button, TextBox } from "../style/form";
 
 //const
-import { SERVER_URL, KEY_ISLOGGEDIN, KEY_USERNAME, KEY_SESSION_ID } from "./../../util/constant";
+import { KEY_ISLOGGEDIN, KEY_USERNAME, KEY_SESSION_ID } from "./../../util/constant";
 
 //========================================== action type ==========================================
 const LOGIN = "LOGIN";
@@ -27,7 +27,11 @@ function reducerMiddleware(dispatch) {
     switch (action.type) {
       case LOGIN:
         try {
-          const result = await axios.post(`${SERVER_URL}/user/login`, action.data);
+          const result = await Axios.post("/user/login", action.data);
+
+          //after login success, set the bearer token for axios
+          SetToken(result.data.sessionId);
+
           dispatch({ type: LOGIN_SUCCESS, data: result.data });
         } catch (e) {
           dispatch({ type: LOGIN_ERROR });

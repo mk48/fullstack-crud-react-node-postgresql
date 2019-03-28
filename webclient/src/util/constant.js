@@ -8,4 +8,4 @@ export const KEY_SESSION_ID = "sessionId";
 export const SERVER_URL = "http://localhost:3001";
 //export const SERVER_URL = "";
 
-export const CLIENT_VERSION = "1.0.6"; 
+export const CLIENT_VERSION = "1.0.0"; 

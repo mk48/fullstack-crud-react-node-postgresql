@@ -1,8 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
 
-//const
-import { SERVER_URL } from "./../../../util/constant";
+import Axios  from "./../../../util/Axios";
+
 
 //concept taken from 
 //https://www.robinwieruch.de/react-hooks-fetch-data/
@@ -18,7 +17,7 @@ const useQueryDataApi = (apiMethod, url, initialData) => {
     setIsError(false);
     setLoading(true);
 
-    const fullURL = `${SERVER_URL}/${url}`;
+    const fullURL = `/${url}`;
     const toServer = {
       sortBy, filters, pageIndex, pageSize
     };
@@ -29,9 +28,9 @@ const useQueryDataApi = (apiMethod, url, initialData) => {
     try {
       let result;
       if (apiMethod === "post") {
-        result = await axios.post(fullURL, toServer);
+        result = await Axios.post(fullURL, toServer);
       } else if (apiMethod === "get") {
-        result = await axios.get(fullURL, { params: toServer });
+        result = await Axios.get(fullURL, { params: toServer });
       }
 
       setData(result.data.rows);

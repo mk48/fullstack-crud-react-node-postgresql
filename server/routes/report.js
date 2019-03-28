@@ -2,11 +2,12 @@ var express = require("express");
 var router = express.Router();
 var fs = require("fs");
 const uuidv4 = require("uuid/v4");
+const Auth = require("../util/authenticate");
 
 const jsreport = require("jsreport-core")();
 jsreport.init();
 
-router.get("/testpdf", async function(req, res, next) {
+router.get("/testpdf", Auth.isAuthenticated, async function(req, res, next) {
   try {
     const resp = await jsreport.render({
       template: {
@@ -37,7 +38,7 @@ router.get("/testpdf", async function(req, res, next) {
   }
 });
 
-router.get("/testhtml", async function(req, res, next) {
+router.get("/testhtml", Auth.isAuthenticated, async function(req, res, next) {
   try {
     const resp = await jsreport.render({
       template: {

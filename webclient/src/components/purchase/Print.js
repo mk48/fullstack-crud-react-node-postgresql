@@ -1,9 +1,6 @@
 import React, { useEffect, useReducer } from "react";
-import axios from "axios";
+import Axios from "./../../util/Axios";
 import { saveAs } from "file-saver";
-
-//const
-import { SERVER_URL } from "./../../util/constant";
 
 const LOAD_REPORTS = "LOAD_REPORTS";
 const LOAD_INIT = "LOAD_INIT";
@@ -17,7 +14,7 @@ function reducerMiddleware(dispatch) {
     switch (action.type) {
       case LOAD_REPORTS:
         try {
-          const result = await axios.get(`${SERVER_URL}/report/testhtml`);
+          const result = await Axios.get("/report/testhtml");
           dispatch({ type: LOAD_SUCCESS, data: result.data });
         } catch (e) {
           dispatch({ type: LOAD_ERROR });

@@ -6,11 +6,11 @@ async function Get(sessionId) {
     where: { id: sessionId }
   });
 
-  if (row.user_id) {
+  if (!row.dataValues.user_id) {
     throw new Error("Session expired");
   }
 
-  return row;
+  return row.dataValues;
 }
 
 async function Add(userId) {
@@ -18,14 +18,26 @@ async function Add(userId) {
 
   //create a session
   await models.session.create({
-    id: uuidv4(),
+    id: sessionId,
     user_id: userId
   });
 
   return sessionId;
 }
 
+async function Remove(sessionId) {
+  
+  //create a session
+  await models.session.destroy({
+    where: {id : sessionId}
+  });
+
+  return true;
+}
+
+
 module.exports = {
   Get: Get,
-  Add: Add
+  Add: Add,
+  Remove: Remove
 };

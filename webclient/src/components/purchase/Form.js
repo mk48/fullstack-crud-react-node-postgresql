@@ -113,6 +113,11 @@ export default function Form({ match }) {
     });
   }
 
+  function addOneRowInGrid(e) {
+    e.preventDefault();
+    dispatch({ type: ADD_ONE_PURCHASE_GRID_ROW });
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <Row>
@@ -205,9 +210,7 @@ export default function Form({ match }) {
         //onSelect={selected => setSelectedRowCol(selected)}
       />
 
-      <Button onClick={e => dispatch({ type: ADD_ONE_PURCHASE_GRID_ROW })}>
-        Add rows
-      </Button>
+      <Button onClick={addOneRowInGrid}>Add rows</Button>
 
       <Row>
         <Column span="3">

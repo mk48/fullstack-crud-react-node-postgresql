@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const Auth = require("../util/authenticate");
 
 const categoryBL = require("./../bl/category");
 
-router.get("/search", async function(req, res, next) {
+router.get("/search", Auth.isAuthenticated, async function(req, res, next) {
   const name = req.query.name;
 
   try {

@@ -1,8 +1,9 @@
 var express = require("express");
 var router = express.Router();
 var models = require("../models");
+const Auth = require("../util/authenticate");
 
-router.get("/search", async function(req, res, next) {
+router.get("/search", Auth.isAuthenticated, async function(req, res, next) {
   const name = req.query.name;
 
   try {
