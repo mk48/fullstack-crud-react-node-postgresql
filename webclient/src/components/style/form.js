@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Row } from "./grid";
 
 export const FormRow = styled(Row)`
@@ -17,7 +17,7 @@ export const FormItem = styled.div`
 `;
 
 export const Button = styled.button`
-  background: ${props => (props.primary ? "rgb(28, 184, 65)" : "#555555")};
+  background-color: #9494b8;
   font-size: 16px;
   color: white;
   padding: 7px 15px;
@@ -25,8 +25,13 @@ export const Button = styled.button`
   text-align: center;
   display: inline-block;
   border: none;
-  border-radius: 4px;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+
+  ${props =>
+    props.primary &&
+    css`
+      background-color: rgb(28, 184, 65);
+    `}
 `;
 
 export const TextBox = styled.input`

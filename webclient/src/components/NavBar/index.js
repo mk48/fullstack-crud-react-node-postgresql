@@ -8,7 +8,7 @@ import { Row, Column } from "../style/grid";
 import Tab from "./../Common/Tab";
 
 //style
-import { NavBarStyle, ToolbarButton } from "./style";
+import { NavBarStyle, ToolbarButton, Logout } from "./style";
 
 //state
 import { initialState } from "./initialState";
@@ -36,14 +36,13 @@ export default function NavBar({ match }) {
 
   return (
     <Row>
-      <Column span="10">
+      <Column span="11">
         <NavBarStyle>
           <Tab>
             <div tabId={1} label="Product">
               <Link to={"/product/list"}>
                 <ToolbarButton>List all</ToolbarButton>
               </Link>
-              &nbsp;
               <Link to={"/product/new"}>
                 <ToolbarButton>Add new</ToolbarButton>
               </Link>
@@ -51,8 +50,7 @@ export default function NavBar({ match }) {
             <div tabId={2} label="Purchase">
               <Link to={"/purchase/list"}>
                 <ToolbarButton>List all</ToolbarButton>
-              </Link>{" "}
-              &nbsp;
+              </Link>
               <Link to={"/purchase/new"}>
                 <ToolbarButton>Add new</ToolbarButton>
               </Link>
@@ -61,8 +59,8 @@ export default function NavBar({ match }) {
         </NavBarStyle>
       </Column>
 
-      <Column span="2">
-        {state.userName} <button onClick={logout}>logout</button>{" "}
+      <Column span="1">
+          {state.userName} | <Logout onClick={logout}>logout</Logout>
       </Column>
     </Row>
   );

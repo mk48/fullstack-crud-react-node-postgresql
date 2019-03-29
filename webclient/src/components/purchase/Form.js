@@ -10,6 +10,7 @@ import { PurchaseGridOneCell } from "./GridComponents";
 //style component
 import { Row, Column } from "../style/grid";
 import { Button, TextBox } from "../style/form";
+import { DataSheetStyle } from "./style";
 
 //private
 import "./style.css";
@@ -28,7 +29,8 @@ import {
   UPDATE_INIT,
   ADD_ONE_PURCHASE_GRID_ROW,
   GRID_MRP_CHANGE,
-  GRID_QTY_CHANGE
+  GRID_QTY_CHANGE,
+  GRID_SELECTION_CHANGE
 } from "./State/actionTypes";
 import { save, load, update } from "./State/actionCreator";
 
@@ -174,41 +176,43 @@ export default function Form({ match }) {
           />
         </Column>
       </Row>
-      <ReactDataSheet
-        data={GenerateDataSheetGridFromState(state, dispatch)}
-        valueRenderer={cell => cell.value}
-        sheetRenderer={props => (
-          <table className={props.className + " purchaseGrid"}>
-            <thead>
-              <tr>
-                <th className="header" width="50px">
-                  SrNo
-                </th>
-                <th className="header">Product</th>
-                <th className="header" width="100px">
-                  Qty
-                </th>
-                <th className="header" width="100px">
-                  Mrp
-                </th>
-                <th className="header" width="100px">
-                  Qty x Mrp
-                </th>
-              </tr>
-            </thead>
-            <tbody>{props.children}</tbody>
-          </table>
-        )}
-        rowRenderer={({ row, cells, children }) => <tr>{children}</tr>}
-        onCellsChanged={gridCellsChanged}
-        cellRenderer={PurchaseGridOneCell}
-        /*selected={{
+      <DataSheetStyle>
+        <ReactDataSheet
+          data={GenerateDataSheetGridFromState(state, dispatch)}
+          valueRenderer={cell => cell.value}
+          sheetRenderer={props => (
+            <table className={props.className + " purchaseGrid"}>
+              <thead>
+                <tr>
+                  <th className="header" width="50px">
+                    SrNo
+                  </th>
+                  <th className="header">Product</th>
+                  <th className="header" width="100px">
+                    Qty
+                  </th>
+                  <th className="header" width="100px">
+                    Mrp
+                  </th>
+                  <th className="header" width="100px">
+                    Qty x Mrp
+                  </th>
+                </tr>
+              </thead>
+              <tbody>{props.children}</tbody>
+            </table>
+          )}
+          //rowRenderer={({ row, cells, children }) => <tr>{children}</tr>}
+          onCellsChanged={gridCellsChanged}
+          cellRenderer={PurchaseGridOneCell}
+          /*selected={{
           start: { i: selectedRowCol.start.i, j: selectedRowCol.start.j },
           end: { i: selectedRowCol.end.i, j: selectedRowCol.end.j }
         }}*/
-        //selected={selectedRowCol}
-        //onSelect={selected => setSelectedRowCol(selected)}
-      />
+          //selected={state.gridSelectedRowCol}
+          // onSelect={selected => dispatch({type: GRID_SELECTION_CHANGE, data: selected } )}
+        />
+      </DataSheetStyle>
 
       <Button onClick={addOneRowInGrid}>Add rows</Button>
 

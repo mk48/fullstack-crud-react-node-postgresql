@@ -15,6 +15,7 @@ import {
   GRID_PRODUCT_CHANGE,
   GRID_MRP_CHANGE,
   GRID_QTY_CHANGE,
+  GRID_SELECTION_CHANGE,
   ADD_ONE_PURCHASE_GRID_ROW
 } from "./actionTypes";
 
@@ -105,6 +106,12 @@ export default function reducer(state, action) {
       const st = { ...state, purchase_grids: purchaseGridUpdated };
       return recalculateTotalAmount(st);
     }
+
+    case GRID_SELECTION_CHANGE:
+      return {
+        ...state,
+        gridSelectedRowCol: action.data
+      };
 
     //=============================== grid buttons ===============================
     case ADD_ONE_PURCHASE_GRID_ROW: {

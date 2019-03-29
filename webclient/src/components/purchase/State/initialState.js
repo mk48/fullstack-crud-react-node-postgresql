@@ -23,6 +23,7 @@ export const initialFormState = {
     name: ""
   },
   purchase_grids: gridsData,
+  gridSelectedRowCol: { start: { i: 0, j: 1 }, end: { i: 0, j: 1 } },
   amount: 0,
   discount_percentage: 0,
   discount_amount: 0,
