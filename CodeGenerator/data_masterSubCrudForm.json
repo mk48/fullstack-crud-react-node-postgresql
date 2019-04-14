@@ -1,0 +1,146 @@
+{
+    "componentName": "Sample",
+      
+    "form": {
+      "name": "purchase",
+      "isCrud": true,
+      "rootURLforFormSubmit": "/purchase",
+      "apiURLforDataGrid": "products/query",
+      "fields": [
+        {
+          "name": "supplier",
+          "label": "Supplier",
+          "type": "dropdown",
+          "isRequired": true,
+          "initialValue": "{ id: \"\", name: \"\" }"
+        },
+        {
+          "name": "dob",
+          "label": "Date of birth",
+          "type": "date",
+          "isRequired": true,
+          "initialValue": ""
+        }
+      ],
+      "editGrid": {
+        "name": "purchase_grids",
+        "considerRowIsEmptyIfThisColumnIsEmpty": "product",
+        "columns":[
+          {
+            "name": "srno",
+            "label": "Sr. no",
+            "initialValue": 0,
+            "isReadOnly": true
+          },
+          {
+            "name": "product",
+            "label": "Product",
+            "type": "dropdown",
+            "apiURLforListItems": "products/search",
+            "initialValue": "{ id: \"\", name: \"\" }",
+            "afterdropdownSelection_fill_edit_grid":[
+              {
+                "editGridColumn": "mrp",
+                "valueFromDropDown": "action.data.price"
+              },
+              {
+                "editGridColumn": "qty",
+                "valueFromDropDown": "1"
+              },
+              {
+                "editGridColumn": "qty_mrp",
+                "valueFromDropDown": "action.data.price"
+              }
+            ]
+          },
+          {
+            "name": "qty",
+            "label": "Qty",
+            "initialValue": "",
+            "isRecalculationAfterChanged": true
+          },
+          {
+            "name": "mrp",
+            "label": "Mrp",
+            "initialValue": "",
+            "isRecalculationAfterChanged": true
+          },
+          {
+            "name": "qty_mrp",
+            "label": "Mrp x Qty",
+            "initialValue": "",
+            "isReadOnly": true
+          }
+        ]
+      }
+    },
+  
+    "copyFiles": [
+      {
+        "templateFilePath": "./templates/actionTypes.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": "State"
+      },
+      {
+        "templateFilePath": "./templates/actionCreator.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": "State"
+      },
+      {
+        "templateFilePath": "./templates/initialState.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": "State"
+      },
+      {
+        "templateFilePath": "./templates/reducer.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": "State"
+      },
+      {
+        "templateFilePath": "./templates/reducerMiddleware.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": "State"
+      },
+      {
+        "templateFilePath": "./templates/form.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": ""
+      },
+      {
+        "templateFilePath": "./templates/index.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": ""
+      },
+      {
+        "templateFilePath": "./templates/List.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": ""
+      },
+      {
+        "templateFilePath": "./templates/View.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": ""
+      },
+      {
+        "templateFilePath": "./templates/FormUtil.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": ""
+      },
+      {
+        "templateFilePath": "./templates/style.css",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": ""
+      },
+      {
+        "templateFilePath": "./templates/server/masterSubCrudForm/bl.ejs",
+        "destinationFolder": "./../server/bl",
+        "moveToRootFolder": true
+      },
+      {
+        "templateFilePath": "./templates/server/masterSubCrudForm/routes.ejs",
+        "destinationFolder": "./../server/routes",
+        "moveToRootFolder": true
+      }
+    ]
+  }
+  

@@ -1,0 +1,63 @@
+{
+  "componentName": "Sample",
+
+  "initialDataLoad": {
+    "actionTypeName": "LOAD_SHOP_AND_ACCOUNT_YR",
+    "state": "shopsAndAccountYears",
+    "apiURL": "/user/loadShopsAndAccountYears"
+  },
+
+  "userAction": {
+    "actionTypeName": "SELECT_SHOP",
+    "state": "selectShop",
+    "apiURL": "/user/selectShopAndAccountYr",
+    "redirectAfterSuccess": "/home"
+  },
+
+  "form": {
+    "fields": [
+      {
+        "name": "name",
+        "label": "Name",
+        "type": "text",
+        "isRequired": true,
+        "initialValue": "my name"
+      },
+      {
+        "name": "dob",
+        "label": "Date of birth",
+        "type": "date",
+        "isRequired": true,
+        "initialValue": ""
+      }
+    ]
+  },
+
+  "copyFiles": [
+    {
+      "templateFilePath": "./templates/actionTypes.ejs",
+      "destinationFolder": "./../webclient/src/components/",
+      "subFolder": "State"
+    },
+    {
+      "templateFilePath": "./templates/initialState.ejs",
+      "destinationFolder": "./../webclient/src/components/",
+      "subFolder": "State"
+    },
+    {
+      "templateFilePath": "./templates/reducer.ejs",
+      "destinationFolder": "./../webclient/src/components/",
+      "subFolder": "State"
+    },
+    {
+      "templateFilePath": "./templates/reducerMiddleware.ejs",
+      "destinationFolder": "./../webclient/src/components/",
+      "subFolder": "State"
+    },
+    {
+      "templateFilePath": "./templates/form.ejs",
+      "destinationFolder": "./../webclient/src/components/",
+      "subFolder": ""
+    }
+  ]
+}
