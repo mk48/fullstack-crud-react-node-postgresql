@@ -1,0 +1,78 @@
+{
+    "componentName": "Sample",
+      
+    "form": {
+      "name": "unit",
+      "isCrud": true,
+      "rootURLforFormSubmit": "/unit",
+      "apiURLforDataGrid": "unit/query",
+      "fields": [
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "isRequired": true,
+          "initialValue": ""
+        }
+      ]
+    },
+  
+    "copyFiles": [
+      {
+        "templateFilePath": "./templates/actionTypes.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": "State"
+      },
+      {
+        "templateFilePath": "./templates/actionCreator.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": "State"
+      },
+      {
+        "templateFilePath": "./templates/initialState.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": "State"
+      },
+      {
+        "templateFilePath": "./templates/reducer.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": "State"
+      },
+      {
+        "templateFilePath": "./templates/reducerMiddleware.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": "State"
+      },
+      {
+        "templateFilePath": "./templates/form.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": ""
+      },
+      {
+        "templateFilePath": "./templates/index.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": ""
+      },
+      {
+        "templateFilePath": "./templates/List.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": ""
+      },
+      {
+        "templateFilePath": "./templates/View.ejs",
+        "destinationFolder": "./../webclient/src/components/",
+        "subFolder": ""
+      },
+      {
+        "templateFilePath": "./templates/server/crudForm/bl.ejs",
+        "destinationFolder": "./../server/bl",
+        "moveToRootFolder": true
+      },
+      {
+        "templateFilePath": "./templates/server/crudForm/routes.ejs",
+        "destinationFolder": "./../server/routes",
+        "moveToRootFolder": true
+      }
+    ]
+  }
+  
