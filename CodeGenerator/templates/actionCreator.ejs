@@ -1,0 +1,32 @@
+import { SAVE, LOAD, UPDATE } from "./actionTypes";
+
+export function save(state) {
+  const data = collectDatafromState(state);
+
+  return { type: SAVE, data: data };
+}
+
+export function load(id) {
+  return { type: LOAD, data: id };
+}
+
+export function update(id, state) {
+  const data = collectDatafromState(state);
+
+  return { type: UPDATE, data: { ...data, id: id } };
+}
+
+//============================================= local functions =======================
+
+function collectDatafromState(state) {
+  const data = {
+    <% form.fields.forEach(function(formElement){ %>
+    <%= formElement.name %> : state.<%= formElement.name %> ,
+    <% }); %> 
+    <% if (typeof form.editGrid != 'undefined') { %>
+    <%= form.editGrid.name %> : state.<%= form.editGrid.name %>.filter(pg => pg.<%= form.editGrid.considerRowIsEmptyIfThisColumnIsEmpty%>.id !== ""),
+    <% } %>
+  };
+
+  return data;
+}
